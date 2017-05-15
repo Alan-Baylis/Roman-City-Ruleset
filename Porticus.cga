@@ -1,4 +1,3 @@
-
 /**
  * File:    RomanPorticus.cga
  * Created: 15 Feb 2014 10:04:24 GMT
@@ -8,7 +7,7 @@
 version "2013.1"
 
 import col : "Colonnade.cga"
-import dom : "Domus.cga" (houseType = "ROMAN SHOPS", baseHeight = 0, redWall_on = "false")		
+import dom : "Domus.cga" (houseType = "ROMAN SHOPS", redWall_on = "false")		
 import rf:   "Roof.cga"	
 import tex : "TexturesAssets.cga"	
 
@@ -661,7 +660,7 @@ Overhang -->
 						center(y)
 						tex.Block("wall",tile)
 				|rf.pedimentWidth-col.geisonProjection: NIL}
-
+		
 	else: NIL		
 
 
