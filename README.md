@@ -1,8 +1,8 @@
 ![](http://www.mariesaldana.com/wp-content/uploads/2017/01/houses.png)
 
-[Download](https://github.com/mariegsaldana/Roman-City-Ruleset/archive/master.zip)
+## [Download](https://github.com/mariegsaldana/Roman-City-Ruleset/archive/master.zip)
 
-[About](https://github.com/mariegsaldana/Roman-City-Ruleset/wiki/About-the-Roman-City-Ruleset)
+## [About](https://github.com/mariegsaldana/Roman-City-Ruleset/wiki/About-the-Roman-City-Ruleset)
 
 The Roman City Ruleset is a library of procedural rules for [Esri CityEngine](http://www.esri.com/software/cityengine). It comprises a set of building typologies that can be stylistically adjusted to create Hellenistic, Etruscan, and Roman cities. 
 
