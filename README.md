@@ -1,5 +1,4 @@
-# Roman City Ruleset
-A library of procedural rules for creating Greek and Roman architecture and cities
+![](http://etc.ucla.edu/wp-content/uploads/2014/09/title.jpg)
 
 For documentation see the [wiki](https://github.com/mariegsaldana/Roman-City-Ruleset/wiki)
 
