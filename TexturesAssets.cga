@@ -4,7 +4,7 @@
  * Author:  Marie Saldana
  */
 
-version "2013.1"
+version "2017.0"
 
 ///////REFERENCED ATTRIBUTES
 @Group("General")@Range("HIGH","MED","LOW")
@@ -46,8 +46,8 @@ const groundTex				= fileRandom("ground/ground_*.jpg")
 const groundTexBW			= fileRandom("ground/ground_*_BW.jpg")
 const greenGroundTex		= fileRandom("green/green_0*.jpg")
 const streetTex				= "streets/basaltpavers.jpg"
-const curbTex				= "streets/basaltpavers.jpg"//"streets/trottoir.02.color.png"
-const sidewalkTex			= "streets/basaltpavers.jpg"//"streets/trottoir.02.color.png"
+const curbTex				= "streets/basaltpavers.jpg"
+const sidewalkTex			= "streets/basaltpavers.jpg"
 
 ///////ASSETS
 ///CELLA
@@ -66,6 +66,7 @@ const acroterionAsset 		= 	case highLOD || medLOD: "roof/models/acroterion.obj"
 								else: "builtin:cube"
 const roofBrickBottomAsset	= 	"roof/models/roofbrick_bottom.obj"
 const roofBrickRound 		= 	"roof/models/roofbrick_round.obj"
+
 ///PEDIMENT
 const geisonAsset 			= 	case highLOD: "entablature/models/geison.obj" 						
 								else: "builtin:cube"

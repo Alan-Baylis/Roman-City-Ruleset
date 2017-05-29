@@ -35,8 +35,8 @@ const columnHeight				= 	col.columnHeight
 #-------Roof
 const roofThickness				= 0.2
 
-@Group("Roof")@Range("true","false")			
-attr antefix				= "false"
+@Group("Roof")@Range(true,false)			
+attr antefix				= false
 
 @Group("Roof")
 attr roof_angle			= 	case tuscan: 19
@@ -149,7 +149,7 @@ Antefixes(n,w,h) -->
 				| { ~ n : split(x){~1: Antefixa(w,h) | ~1: Antefixa(w,h) } }* }
 
 Antefixa(w,h) -->
-	case antefix == "true" :
+	case antefix == true :
 		color(wall)
 		s(w*0.4,h*0.2,'1) t('-0.5,0,0) i(tex.antefixAsset) Antefixa.
 		tex.WholeBlock("block")
@@ -157,7 +157,7 @@ Antefixa(w,h) -->
 	
 
 TopAcroteria(w) -->
-case antefix == "true" :
+case antefix == true :
 	i("builtin:cube")
 	color(wall)
 	s(simaLength/2,MidAcroH/2,MidAcroH)
@@ -172,7 +172,7 @@ case antefix == "true" :
 else: NIL
 
 SideAcroteria(w) -->
-case antefix == "true" :
+case antefix == true :
 	i("builtin:cube")
 	color(wall)
 	s(simaLength/2,SideAcroH/2,SideAcroH)
