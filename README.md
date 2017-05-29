@@ -1,4 +1,4 @@
-![](http://www.mariesaldana.com/wp-content/uploads/2017/01/houses.png)
+![](http://etc.ucla.edu/wp-content/uploads/2014/09/title.jpg)
 
 [Download](https://github.com/mariegsaldana/Roman-City-Ruleset/archive/master.zip)
 
