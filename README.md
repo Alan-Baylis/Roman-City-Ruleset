@@ -8,4 +8,6 @@ The ruleset was begun in 2010 by [Marie Saldaña](http://www.mariesaldana.com/ab
 
 [How to use the RCR](https://github.com/mariegsaldana/Roman-City-Ruleset/wiki/How-to-Use-the-Roman-City-Ruleset)
 
+First, make sure you download the contents of the [assets](https://www.dropbox.com/sh/dsauh64qkn8botp/AACeuybbpFe62SeUdRGbQSk9a?dl=0) folder into your CityEngine project. [Read more...](https://github.com/mariegsaldana/Roman-City-Ruleset/wiki/About-the-Roman-City-Ruleset)
+
 [ArcGIS - CityEngine - Unity workflow tutorial](https://github.com/mariegsaldana/Roman-City-Ruleset/wiki/ArcGIS__CityEngine__Unity:-Workflow-Tutorial)
