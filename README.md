@@ -6,7 +6,7 @@ The ruleset started by [Marie Saldaña](http://www.mariesaldana.com) in 2010 and
 
 [How to use the RCR](https://github.com/mariegsaldana/Roman-City-Ruleset/wiki/How-to-Use-the-Roman-City-Ruleset)
 
-[Download](https://github.com/mariegsaldana/Roman-City-Ruleset/archive/master.zip) the ruleset
+Download the [ruleset](https://github.com/mariegsaldana/Roman-City-Ruleset/archive/master.zip)
 
 Download [assets](https://www.dropbox.com/sh/dsauh64qkn8botp/AACeuybbpFe62SeUdRGbQSk9a?dl=0)
 
