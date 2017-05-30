@@ -27,16 +27,14 @@ const cyan = "#34e1fa"
 const green = "#22E01B"
 const pink	= "#FF00DD"
 
-
-
 //////TEXTURES
-const floorTex 				= "roof/textures/flatroof3.jpg"
+const floorTex 				= "roof/textures/roof3.jpg"
 const roofTex 				= "roof/textures/roof.bw.jpg"
-const tileTex 				= fileRandom("roof/textures/flatroof*.jpg")
+const tileTex 				= fileRandom("roof/textures/roof*.jpg")
 const wallTex 				= fileRandom("dirtmaps/dirtmap.*.jpg")
 const test 					= "builtin:uvtest.png"
-const woodTex 				= fileRandom("doors/textures/double-door_noble_1.*.c.jpg")
-const woodTexBW 			= fileRandom("doors/textures/double-door_noble_1.*.c.jpg")
+const woodTex 				= fileRandom("doors/textures/double_door_1.*.c.jpg")
+const woodTexBW 			= fileRandom("doors/textures/double_door_1.*.c.jpg")
 const blockTex				= "entablature/textures/block.jpg"
 const tallBlockTex			= "entablature/textures/tallBlock.jpg"
 const sandTex				= "ground/ground_2.jpg"
@@ -83,8 +81,7 @@ const triglyphAsset 		= 	case highLOD || medLOD: "entablature/models/triglyph.ob
 								else: "builtin:cube"
 const guttaeAsset 			= 	case highLOD || medLOD :"entablature/models/guttae.obj" 
 								else: "builtin:cube"
-const corniceAsset			= 	//case highLOD && !corinthian || medLOD && !corinthian: "entablature/models/geison.obj" 
-								case highLOD && corinthian || medLOD && corinthian: "entablature/models/cornice.obj"
+const corniceAsset			= 	case highLOD && corinthian || medLOD && corinthian: "entablature/models/cornice.obj"
 								else: "builtin:cube"
 
 ///COLUMNS
