@@ -6,8 +6,8 @@
 
 version "2013.1"
 
-import col : "Colonnade.cga"		(colonnadeType = "ARCADE", plinthH = 0)//(LOD  = LOD, order_ = order_,plinthH = plinthH, column_diameter = archColumnDiameter, columnSpacing = columnSpacing, column = column, architrave = architrave, frieze = frieze, metopes = metopes, triglyph = triglyph, cornice = cornice) 
-import tex : "TexturesAssets.cga"	 
+import col : "_Colonnade.cga"		(colonnadeType = "ARCADE", plinthH = 0)//(LOD  = LOD, order_ = order_,plinthH = plinthH, column_diameter = archColumnDiameter, columnSpacing = columnSpacing, column = column, architrave = architrave, frieze = frieze, metopes = metopes, triglyph = triglyph, cornice = cornice) 
+import tex : "_TexturesAssets.cga"	 
 
 #-------Scene Settings
 

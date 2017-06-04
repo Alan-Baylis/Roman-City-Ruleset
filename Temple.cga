@@ -1,14 +1,20 @@
 /**
  * File:    Temple.cga
  * Created: 13 Feb 2014 11:48:55 GMT
+ * Updated: June 2017
  * Author:  Marie Saldana
  */
 
-version "2013.1"
+version "2017.0"
 
-import col : "Colonnade.cga"		
-import tex : "TexturesAssets.cga"	
-import rf:   "Roof.cga" 
+@Hidden 
+import col : "_Colonnade.cga" 
+
+@Hidden 		
+import tex : "_TexturesAssets.cga" 
+
+@Hidden 	
+import rf:   "_Roof.cga" 
 
 #-------Scene Settings
 
@@ -20,10 +26,12 @@ attr LOD					= "MED"
 	const lowLOD				= LOD == "LOW"
 
 #--------General
+
 @Group("General",1)
 attr elevation 	= 0
 	
 #--------Base
+
 #----------------Stylobate
 
 @Group ("Base","Stylobate",2)@Order(1)
@@ -153,7 +161,7 @@ attr posticum_prostyle_gap	= 0
 @Group("Colonnade",9)@Order(1)@Range("TUSCAN","DORIC","IONIC","CORINTHIAN")
 @Description("architectural order")
 attr order_					= "DORIC"
-	const tuscan				= order_ == "TUSCAN" #REVISIT DEFAULT SETTINGS 
+	const tuscan				= order_ == "TUSCAN" 
 	const doric					= order_ == "DORIC"
 	const ionic					= order_ == "IONIC"
 	const corinthian			= order_ == "CORINTHIAN"
@@ -163,11 +171,11 @@ attr order_					= "DORIC"
 attr column_diameter		= 	1
 
 @Group ("Colonnade",9)
-@Description("additional width for the opening between the two center columns in front (as a factor of columnSpacing)")
+@Description("additional width for the opening between the two center columns in front (as a factor of column_spacing)")
 attr center_opening_front	= 	1 
 
 @Group ("Colonnade",9)
-@Description("additional width for the opening between the two center columns in back (as a factor of columnSpacing)")
+@Description("additional width for the opening between the two center columns in back (as a factor of column_spacing)")
 attr center_opening_back	= 	1 
 
 @Group ("Colonnade",9)
@@ -276,6 +284,7 @@ boundaryColumnR				= lastColumn("left") ||  lastColumn("right")
 boundaryColumnL				= firstColumn("left") || firstColumn("right")
 
 #-------Colors
+
 @Group("Colors",25)@Color
 attr base					= "#CDC6AD" 
 @Group("Colors",25)@Color @Range( "#EEEEEE", "#F5F5F5","#FFFFFF","#E0E0D1","#AAAAA0")
@@ -346,13 +355,13 @@ split(y){baseH:color(base)comp(f){all:TholosBase(comp.index,comp.total)}
 
 TholosBase(n,y) -->
 	case n == 0:setPivot(xyz,5) FrontStairs(scope.sx)
-	case n == y-1: [ tex.Block("wall",tile)]offset(-col.columnSpacing/2, inside)extrude(peristyleH) comp(f){all:TholosCella(comp.index,comp.total)}
+	case n == y-1: [ tex.Block("wall",tile)]offset(-col.column_spacing/2, inside)extrude(peristyleH) comp(f){all:TholosCella(comp.index,comp.total)}
 	else: tex.Block("wall", tile)
 		
 TholosColonnade(n,y) -->
 	case n == 0: setPivot(xyz,5)split(x){~1:rotate(abs,pivot,0,-18,0)t(0,0,-column_diameter/4)col.ColumnTile(1,column_diameter,split.total)
 							|~1:NIL}
-	case n == y-1: t(0,0,entablatureH)[reverseNormals tex.Block("wall",tile)]color(roof)roofHip(roof_angle)comp(f){top: rf.TempleRoof(col.columnSpacing,roofBrickW,roofBrickH)}
+	case n == y-1: t(0,0,entablatureH)[reverseNormals tex.Block("wall",tile)]color(roof)roofHip(roof_angle)comp(f){top: rf.TempleRoof(col.column_spacing,roofBrickW,roofBrickH)}
 	
 	case n < 10 && tholos_colonnade == "20": setPivot(xyz,5)split(x){~1:rotate(abs,pivot,0,-18,0)t(0,0,-column_diameter/4)col.ColumnTile(1,column_diameter,split.total)
 							|~1:col.ColumnTile(1,column_diameter,split.total)}

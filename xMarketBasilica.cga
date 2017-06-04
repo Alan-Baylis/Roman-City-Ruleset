@@ -1,14 +1,13 @@
 /**
  * File:    BasilicaMagnesia.cga
- 
  * Created: 10 Sep 2012 21:47:00 GMT
  * Author:  msaldana
  */
 
 version "2014.1"
 
-import rf:   "Roof.cga" 			
-import tex : "TexturesAssets.cga"	
+import rf:   "_Roof.cga" 			
+import tex : "_TexturesAssets.cga"	
 
 #-------Scene Settings
 

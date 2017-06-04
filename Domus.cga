@@ -6,9 +6,9 @@
 
 version "2010.3"
 
-import tex : "TexturesAssets.cga"	
-import rf:   "Roof.cga" 			(antefix = "false")
-import col:  "Colonnade.cga"		
+import tex : "_TexturesAssets.cga"	
+import rf:   "_Roof.cga" 			(antefix = false)
+import col:  "_Colonnade.cga"		
 
 ///////REFERENCED ATTRIBUTES
 @Range("HIGH","MED","LOW","MIN")
@@ -51,8 +51,8 @@ attr num_of_floors = 2
 attr porchDepth = rand(2,3)
 attr plinthH  = 0
 attr domusSteps = 50%: 1 25%: 2 else: 3
-@Range("true","false")
-attr redWall_on	= "true"
+@Range(true,false)
+attr redWall_on	= true
 attr extendBelow = 0
 
 
@@ -253,7 +253,7 @@ Wall --> Wall.
 		tex.Block("wall",tile)
 
 PaintedWall -->
-case redWall_on =="true":
+case redWall_on ==true:
 	split(y){ wallpaintHeight : color(redwall)Wall|~1:Wall}
 else: Wall
 	
