@@ -6,10 +6,10 @@
 
 version "2014.1"
 
-import col: "Colonnade.cga"
+import col: "_Colonnade.cga"
 import alt: "Altar.cga"
 import gym: "Gymnasium.cga"
-import tex : "TexturesAssets.cga"
+import tex : "_TexturesAssets.cga"
 import mb: "MarketBasilica.cga"
 import aq: "Aqueduct.cga"
 

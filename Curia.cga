@@ -5,9 +5,9 @@
  */
 
 version "2013.1"
-import rf:   "Roof.cga" 			
-import col:  "Colonnade.cga"		
-import tex : "TexturesAssets.cga"
+import rf:   "_Roof.cga" 			
+import col:  "_Colonnade.cga"		
+import tex : "_TexturesAssets.cga"
 
 #-------Scene Settings	
 

@@ -6,7 +6,7 @@
 
 version "2014.1"
 
-import tex : "TexturesAssets.cga"
+import tex : "_TexturesAssets.cga"
 
 @Group("General",0)@Range("HIGH","MED","LOW")
 attr LOD				= "LOW"

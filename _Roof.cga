@@ -4,12 +4,16 @@
  * Author:  Marie Saldana
  */
 
-version "2013.1"
+version "2017.0"
 
-import tex: "TexturesAssets.cga" (LOD = LOD)
-import col : "Colonnade.cga"	
+@Hidden 
+import tex: "_TexturesAssets.cga" (LOD = LOD)
+
+@Hidden 
+import col : "_Colonnade.cga"	
 
 #-------General
+
 @Group("General",0)@Range("HIGH","MED","LOW")
 attr LOD				= "LOW"
 const highLOD 			= LOD == "HIGH"
@@ -26,6 +30,7 @@ attr order_						= "DORIC"
 const tile						= 	columnHeight
 	
 #------Columns
+
 @Group("Colonnade",2)
 attr column_diameter 			= 	1
 
@@ -33,23 +38,23 @@ const columnSpacing				= 	col.columnSpacing
 const columnHeight				= 	col.columnHeight
 
 #-------Roof
-const roofThickness				= 0.2
+
+const roofThickness				= 	0.2
 
 @Group("Roof")@Range(true,false)			
-attr antefix				= false
+attr antefix					= 	false
 
 @Group("Roof")
-attr roof_angle			= 	case tuscan: 19
-							case ionic: 13.6
-								else: 15
+attr roof_angle					= 	case tuscan: 19
+									case ionic: 13.6
+									else: 15
 
-const MidAcroH				= column_diameter*2.5
-const SideAcroH				= column_diameter*1.75
-
+const MidAcroH					= 	column_diameter*2.5
+const SideAcroH					= 	column_diameter*1.75
 
 #-------Pediment
 @Group("Pediment")
-attr pediment_windows				= 	0
+attr pediment_windows			= 	0
 
 const pedimentWidth 			= 	column_diameter
 #Sima
@@ -66,20 +71,17 @@ const geisonProjection 			= 	column_diameter*col.geisonProjection //column_diame
 const corniceH					= 	column_diameter*col.corniceH
 
 #-------COLORS
-@Group("Colors",9)
+@Group("Colors",9)@Color
 attr wall					= "#EEEEEE"
-@Group("Colors",9)
+@Group("Colors",9)@Color
 attr cornice				= "#C9C0AD"
-@Group("Colors",9)
+@Group("Colors",9)@Color
 attr roof					= "#A8763D"
-@Group("Colors",9) 
+@Group("Colors",9)@Color 
 attr wood					= "#40331B"
-
-
 
 ////////////
 ///////START	
-
 
 TempleRoof(n,w,h) -->
 	color(roof)
@@ -110,7 +112,6 @@ OverhangRoof(w,h) -->
 						 | ~h*1.2 : TopBrickRow(w,h) }
 	else :
 		tex.Block("roof",4,24)
-
 	
 BottomBrickRow(w) -->	 
 	s('1,'1.02,'1) r(scopeCenter,-3,0,0) 
@@ -153,8 +154,7 @@ Antefixa(w,h) -->
 		color(wall)
 		s(w*0.4,h*0.2,'1) t('-0.5,0,0) i(tex.antefixAsset) Antefixa.
 		tex.WholeBlock("block")
-	else: NIL
-	
+	else: NIL	
 
 TopAcroteria(w) -->
 case antefix == true :
@@ -167,7 +167,6 @@ case antefix == true :
 	i(tex.acroterionAsset)
 	[mirror(false,false,true)t(0,0,-w-geisonProjection) tex.WholeBlock("block")]
 	tex.WholeBlock("block")
-
 
 else: NIL
 
@@ -254,8 +253,7 @@ RankingGeisons(n,side) -->
  		t('0.03*side,0,0) s('0.97,simaLength,simaHeight)
 		rotateScope(-90,180,0)
  		s('1,corniceH*0.9,1) t(0,'-1,0) i("builtin:cube")
- 		split(x){ ~ n/4.3: Geison }*
- 		
+ 		split(x){ ~ n/4.3: Geison }*		
 	
 Geison -->
 case corinthian:
@@ -271,7 +269,6 @@ else:
 	t(0,0,geisonProjection- column_diameter/2 ) s('1,'1, column_diameter ) 
 	i(tex.geisonAsset)
 	tex.Block("block")
-	
 
 Beam -->
 	color(wood)

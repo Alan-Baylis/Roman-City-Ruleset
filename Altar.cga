@@ -6,7 +6,7 @@
 
 version "2011.2"
 
-import tex : "TexturesAssets.cga"
+import tex : "_TexturesAssets.cga"
 
 #-------Scene Settings
 
