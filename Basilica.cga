@@ -5,6 +5,7 @@
  * Author:  Marie Saldana
  */
 
+
 version "2017.0"
 
 @Hidden
@@ -85,8 +86,8 @@ attr porch_depth 				= aisle_width
 attr show_interior				= false
 
 @Group("Ground Floor",3)@Order(5)
-attr aisle_width				= column_spacing
-
+attr aisle_width				= 	case columns:column_spacing*2
+									else: arch_width
 
 const groundFloorHeight 		= columnHeight+entablatureH+railingH
 const entablatureH				= column_diameter*col.entablatureH
@@ -98,6 +99,9 @@ const railingH					= 1
 @Description("architectural order of the upper storey")
 attr upper_order						= "DORIC"
 
+@Group("Upper Floor",4)@Order(1)@Range("TUSCAN","DORIC","IONIC","CORINTHIAN")
+attr upper_plinth_height				= case columns: 0 else:(bu.column_spacing*.75+upper_column_diameter)/2
+
 const upperFloorHeight 			= upper_wall_height+upper_baseWall+upper_column_height+upperEntablatureH+upper_railingH
 const upper_column_height		= bu.columnHeight
 const upper_column_diameter		= column_diameter*.75 
@@ -105,12 +109,11 @@ const uppercolumn_spacing		= bu.column_spacing
 const upperEntablatureH			= upper_column_diameter*col.entablatureH
 const upper_wall_height			= upper_column_height*.75
 const upper_baseWall			= case republican: 0 else: railingH+upper_column_height*.22
-const upper_plinth_height				= case columns: 0 else:(bu.column_spacing*.75+upper_column_diameter)/2
 const upper_railingH			= case republican: 0 else: railingH
 
 #--------Colonnade
 
-@Group("Colonnade",5)@Order(3)@Range("COLONNADE","ARCADE")#REVISIT - DOESN'T WORK
+@Hidden@Group("Colonnade",5)@Order(3)@Range("COLONNADE","ARCADE")
 attr colonnade_type		= 	case republican: "COLONNADE" else: "ARCADE"							
 	const columns		= colonnade_type == "COLONNADE"
 	const arches		= colonnade_type == "ARCADE"
@@ -135,14 +138,14 @@ attr column_spacing				= 	case tuscan && columns: 	column_diameter*4
 									case ionic && arches: 		archColumnDiameter*5.5	
 									else: 						archColumnDiameter*9
 									
-const archColumnDiameter		= col.archColumnDiameter		
+const archColumnDiameter		= arch_width/10//col.archColumnDiameter		
 							
 #-------Arcade
 
-@Group("Colonnade","Arcade",5)
+@Group("Colonnade","Arcade",5)#REVISIT: ONLY WORKS AS DOOR WIDTH (USES COLUMN SPACING)
 attr arch_width					= 	3
 
-@Group("Colonnade","Arcade",5)@Range("Front Side", "Both Sides", "Off")
+@Group("Colonnade","Arcade",5)@Range("Front Side", "Both Sides", "Off")#REVISIT: NO COLUMNS ON LOWER STOREY, DOESN'T WORK ON UPPER 
 attr show_orders					 	= "Front Side"
 	const singleSide				= show_orders == "Front Side"
 	const bothSides					= show_orders == "Both Sides"
@@ -154,7 +157,8 @@ const columnHeight				= case columns:col.columnHeight
 
 #--------Walls & Doors
 
-const wallThickness 			= column_diameter+col.columnOffset
+const wallThickness 			= 	case columns:column_diameter+col.columnOffset
+									else: .33
 const doorD						= 0.4
 const doorFrameW				= 0.4
 const doorFrameH				= 0.6
@@ -164,6 +168,7 @@ const entranceFrameW			= doorFrameW+0.1
 #--------Roof
 
 @Group("Roof",6)@Range("Flat", "Angled")
+@Description("Republican type only")
 attr roof_type					= "Flat"
 
 @Group("Roof",6)
