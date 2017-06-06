@@ -44,25 +44,25 @@ attr type 						= "REPUBLICAN"
 				
 #--------Colonnade
 
-@Group("Colonnade",4)@Range("COLONNADE","ARCADE")
-attr colonnadeType		= 	case republican: "COLONNADE" else: "ARCADE"							
-	const columns		= colonnadeType == "COLONNADE"
-	const arches		= colonnadeType == "ARCADE"
+@Hidden @Group("Colonnade",4)@Range("COLONNADE","ARCADE")
+attr colonnade_type		= 	case republican: "COLONNADE" else: "ARCADE"							
+	const columns		= colonnade_type == "COLONNADE"
+	const arches		= colonnade_type == "ARCADE"
 
 @Group("Colonnade",4)
 attr column_diameter			= 	1
 
 @Group("Colonnade",4)@Range("Front Side", "Both Sides", "Off")
-attr showOrders					 	= "Front Side"
-	const singleSide				= showOrders == "Front Side"
-	const bothSides					= showOrders == "Both Sides"
-	const ordersOff					= showOrders == "Off"
+attr show_orders					 	= "Front Side"
+	const singleSide				= show_orders == "Front Side"
+	const bothSides					= show_orders == "Both Sides"
+	const ordersOff					= show_orders == "Off"
 	
 @Group("Colonnade",4)
 attr plinth_height					= 	case columns: 0 else:(column_spacing+column_diameter)/2
 
 @Group("Colonnade",4)
-attr archWidth					= 	3
+attr arch_width					= 	3
 
 @Group("Colonnade",4)
 attr column_spacing				= 	case tuscan && columns: 	column_diameter*4
@@ -72,9 +72,9 @@ attr column_spacing				= 	case tuscan && columns: 	column_diameter*4
 									case tuscan && arches: 		archColumnDiameter*4
 									case doric && arches: 		archColumnDiameter*2.5
 									case ionic && arches: 		archColumnDiameter*5.5	
-									else: 						archWidth //archColumnDiameter*9
+									else: 						arch_width //archColumnDiameter*9
 
-const archColumnDiameter		= archWidth/10
+const archColumnDiameter		= arch_width/10
 const columnHeight				= case columns:col.columnHeight 
 
 									else: col.archH*.75
@@ -97,7 +97,8 @@ const upper_railingH			=  case republican: 0 else: railingH
 
 #--------Walls & Doors
 
-const wallThickness 			= column_diameter+col.columnOffset
+const wallThickness 			= 	case columns:column_diameter+col.columnOffset
+									else: .33
 const doorD						= 0.4
 const doorFrameW				= 0.4
 const doorFrameH				= 0.6
@@ -151,7 +152,7 @@ case republican:
 										|top: Roof}
 			}
 else: 
-	split(y){upper_baseWall: comp(f){side:Wall}
+	split(y){upper_baseWall: comp(f){side:UpperBaseWall}
 			|columnHeight:comp(f){side: s(scope.sx-col.archColumnBaseW,'1,'1)center(x)col.ArcadeStart}
 			|upperEntablatureH:comp(f){side:col.Entablature(column_spacing,column_diameter)
 										|top: offset(-aisle_width)
@@ -183,15 +184,19 @@ Wall -->
 	extrude (-wallThickness)
 	tex.Block("wall", tile)
 	
+UpperBaseWall -->
+	extrude (-wallThickness*2)
+	tex.Block("wall", tile)
+	
 UpperWindows -->
 case republican:
 split(x){~column_spacing:t(column_diameter,0,0)s(scope.sx-column_diameter,'1,'1)WindowWall
 			|{~column_spacing:WindowWall}*
 			|~column_spacing:s(scope.sx-column_diameter,'1,'1)WindowWall}
 else: 
-split(x){~archWidth:WindowWall
-			|{~archWidth:WindowWall}*
-			|~archWidth:WindowWall}
+split(x){~arch_width:WindowWall
+			|{~arch_width:WindowWall}*
+			|~arch_width:WindowWall}
 
 WindowWall -->
 	split(x){~1: UpperWall

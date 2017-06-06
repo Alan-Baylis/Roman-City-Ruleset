@@ -25,9 +25,9 @@ attr order_						= "DORIC"
 	const corinthian				= order_ == "CORINTHIAN"
 	
 @Group("General",0)@Range("COLONNADE","ARCADE")
-attr colonnadeType				= 	"COLONNADE"							
-	const columns					= colonnadeType == "COLONNADE"
-	const arches					= colonnadeType == "ARCADE"
+attr colonnade_type				= 	"COLONNADE"							
+	const columns					= colonnade_type == "COLONNADE"
+	const arches					= colonnade_type == "ARCADE"
 	
 @Group("General",0)
 attr plinth_height 					= 	case arches: arch_width/2 else: 0
@@ -55,10 +55,10 @@ attr show_orders 					= "Front Side"
 	const ordersOff					= show_orders == "Off"
 	
 @Group("Arcade",1) 
-attr arch_width					= 	2
+attr arch_width					= 	3
 
 @Group("Arcade",1) 
-attr wallThickness				= 	.5
+attr wallThickness				= 	.33
 
 const archColumnDiameter 		= 	arch_width/10
 const archColumnBaseW 			= 	case arches && !ordersOff: archColumnDiameter*1.25 else: 0
