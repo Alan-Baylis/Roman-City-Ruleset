@@ -69,7 +69,8 @@ attr order_						= "TUSCAN"
 	const ionic						= order_ == "IONIC"
 	const corinthian				= order_ == "CORINTHIAN"
 
-@Group("Ground Floor",3)@Order(1)@Range("SHOPS", "NO_SHOPS")#REVISIT - DOESN'T WORK (MAKE T/F)
+
+@Hidden@Group("Ground Floor",3)@Order(1)@Range("SHOPS", "NO_SHOPS")#REVISIT - DOESN'T WORK (MAKE T/F)
 attr with_shops					= "NO_SHOPS"
 	const shops						= with_shops == "SHOPS"
 	const noShops					= with_shops == "NO_SHOPS"
@@ -138,14 +139,14 @@ attr column_spacing				= 	case tuscan && columns: 	column_diameter*4
 									case ionic && arches: 		archColumnDiameter*5.5	
 									else: 						archColumnDiameter*9
 									
-const archColumnDiameter		= arch_width/10//col.archColumnDiameter		
+const archColumnDiameter		= arch_width/10	
 							
 #-------Arcade
 
-@Group("Colonnade","Arcade",5)#REVISIT: ONLY WORKS AS DOOR WIDTH (USES COLUMN SPACING)
+@Group("Colonnade","Arcade",5)
 attr arch_width					= 	3
 
-@Group("Colonnade","Arcade",5)@Range("Front Side", "Both Sides", "Off")#REVISIT: NO COLUMNS ON LOWER STOREY, DOESN'T WORK ON UPPER 
+@Group("Colonnade","Arcade",5)@Range("Front Side", "Both Sides", "Off")
 attr show_orders					 	= "Front Side"
 	const singleSide				= show_orders == "Front Side"
 	const bothSides					= show_orders == "Both Sides"
@@ -221,8 +222,10 @@ attr ground					= "#ADB38F"
 
 Lot -->
 case market:
+	innerRect
 	MarketBasilica
 else:
+	innerRect
 	t(0,elevation,0)
 	Base
 	t(0,baseHeight-extra_steps_down*step_height, 0)
