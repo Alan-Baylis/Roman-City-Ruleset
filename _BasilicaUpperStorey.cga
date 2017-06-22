@@ -169,6 +169,7 @@ else:
 Ceiling -->
 color(floor) tex.Block("floor",.5)
 reverseNormals
+t(0,0,-.1)
 color(roof) tex.Block("roof",4,24)								                       
 
 Roof -->
@@ -201,11 +202,13 @@ split(x){~arch_width:WindowWall
 WindowWall -->
 	split(x){~1: UpperWall
 			|column_diameter: split(y){~1: UpperWall
-									  |column_diameter*2: t(0,0,(-wallThickness+column_diameter)/2)color(wood)Window.
+									  |column_diameter*2: t(0,0,wallThickness/4)color(wood)Window.
 									  |~column_diameter: UpperWall}
 			|~1: UpperWall}
 
 UpperWall -->
-	extrude (-wallThickness+column_diameter)
+	t(0,0,wallThickness/4)
+	s('1,'1, wallThickness/2)
+	i("builtin:cube")
 	tex.Block("wall", tile)
 
