@@ -83,7 +83,7 @@ attr back_entrance				= false
 attr porch_depth 				= aisle_width
 
 @Group("Ground Floor",3)@Order(4)@Range(true,false)
-@Description("removes door so that interior is visible")
+@Description("removes door so that interior is visible. works best for republican type")
 attr show_interior				= false
 
 @Group("Ground Floor",3)@Order(5)
@@ -286,7 +286,7 @@ case republican:
 			|entablatureH: comp(f){side:col.Entablature(column_spacing,column_diameter)
 									|top:offset(-aisle_width-wallThickness)
 											comp(f){border: Ceiling
-													|inside: InnerCeiling.
+													|inside: NIL //InnerCeiling.
 													}}
 			|~1: comp(f){side:Railing}}
 else:
@@ -326,6 +326,7 @@ Ceiling -->
 case roof_type == "Flat":
 color(floor) tex.Block("floor",.5)
 reverseNormals
+t(0,0,-.1)
 color(roof) tex.Block("roof",4,24)	
 else:
 OuterRoof
@@ -349,8 +350,6 @@ else: offset(-aisle_width-wallThickness,inside)
 
 Inner -->
 case scope.sz>aisle_width*2:
-//	s('1,'1, scope.sz-aisle_width*2)
-//	center(z) 
 	InnerVolume
 	
 else: InnerVolume
@@ -359,9 +358,12 @@ InnerVolume -->
 case republican && show_interior == true:
 	extrude(groundFloorHeight+upperFloorHeight)
 	color(wall)
-	split(y){columnHeight: comp(f){	front:col.FirstFlushNoLast(column_spacing)
-									|side:col.FirstFlushNoLast(column_spacing)}
-			|entablatureH: comp(f){side:col.Entablature(column_spacing, column_diameter)}
+	split(y){columnHeight: comp(f){	back:col.FirstFlushNoLast(column_spacing)
+									|left:col.FirstFlushNoLast(column_spacing)
+									|right:col.FirstFlushNoLast(column_spacing)}
+			|entablatureH: comp(f){	back:col.Entablature(column_spacing, column_diameter)
+									|left:col.Entablature(column_spacing, column_diameter)
+									|right:col.Entablature(column_spacing, column_diameter)}
 			|~1:bu.UpperVolume}
 case republican && show_interior == false:
 	extrude(groundFloorHeight+upperFloorHeight)
@@ -373,7 +375,8 @@ else:
 	color(wall)
 	split(y){columnHeight: comp(f){	side: split(x){~1:Wall|arch_width:Entrance(scope.sx)|~1:Wall}}
 			|entablatureH: comp(f){side:col.Entablature(column_spacing, column_diameter)}
-			|~1:NIL}					
+			|~1:NIL}
+					
 
 ///////WALLS
 
