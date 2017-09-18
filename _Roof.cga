@@ -34,7 +34,7 @@ const tile						= 	columnHeight
 @Group("Colonnade",2)
 attr column_diameter 			= 	1
 
-const columnSpacing				= 	col.columnSpacing
+const columnSpacing				= 	col.column_spacing
 const columnHeight				= 	col.columnHeight
 
 #-------Roof

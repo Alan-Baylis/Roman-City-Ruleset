@@ -196,7 +196,7 @@ split(y){yDim:comp(f){top:color(floor)tex.WholeBlock("floor",.5)
 
 Prostas(n,r) -->
 color(column)
-col.NoFirstNoLast(col.columnSpacing*3)//(scope.sx/r)
+col.NoFirstNoLast(col.column_spacing*3)//(scope.sx/r)
 
 Wall -->
 s('1,'1,wallThickness)
