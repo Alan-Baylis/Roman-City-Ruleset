@@ -119,8 +119,8 @@ const wallThickness			= .6
 const tile 					= 5
 
 #---------Roof
-const roofBrickW = col.columnSpacing *0.25
-const roofBrickH = col.columnSpacing *0.35
+const roofBrickW = col.column_spacing *0.25
+const roofBrickH = col.column_spacing *0.35
 
 #-------Time Periods
 
@@ -1189,8 +1189,8 @@ Colonnade -->
 	comp(f){top: Roof
 			|bottom: reverseNormals Block
 			|front: Wall
-			|back:split(y){col.columnHeight:  col.NoFirstLastOnBreak(col.columnSpacing)
-							|~1:col.Entablature(col.columnSpacing, column_diameter)}
+			|back:split(y){col.columnHeight:  col.NoFirstLastOnBreak(col.column_spacing)
+							|~1:col.Entablature(col.column_spacing, column_diameter)}
 			}
 			
 ColonnadeLeft -->
@@ -1198,8 +1198,8 @@ ColonnadeLeft -->
 	comp(f){top: Roof
 			|bottom: reverseNormals Block
 			|back: Wall
-			|front:split(y){col.columnHeight:  col.LastOnBreakOnly(col.columnSpacing)
-							|~1:col.Entablature(col.columnSpacing, column_diameter)}
+			|front:split(y){col.columnHeight:  col.LastOnBreakOnly(col.column_spacing)
+							|~1:col.Entablature(col.column_spacing, column_diameter)}
 			}
 			
 ColonnadeEnd -->	
@@ -1207,11 +1207,11 @@ ColonnadeEnd -->
 	comp(f){top: Roof
 			|bottom: reverseNormals Block
 			|front: Wall
-			|back:split(y){col.columnHeight:  col.NoFirstLastFlush(col.columnSpacing) 
-							|~1:col.Entablature(col.columnSpacing, column_diameter)
+			|back:split(y){col.columnHeight:  col.NoFirstLastFlush(col.column_spacing) 
+							|~1:col.Entablature(col.column_spacing, column_diameter)
 							}
 			|left:split(y){col.columnHeight: NIL
-							|~1:col.Entablature(col.columnSpacing, column_diameter)
+							|~1:col.Entablature(col.column_spacing, column_diameter)
 							}
 			}						
 			
@@ -1220,12 +1220,12 @@ ColonnadeEndLeft -->
 	extrude(col.colonnadeHeight)
 	comp(f){top: Roof
 			|bottom: reverseNormals Block
-			|front: split(y){col.columnHeight: col.NoFirstLastOnBreak(col.columnSpacing)
-							|~1:col.Entablature(col.columnSpacing, column_diameter)
+			|front: split(y){col.columnHeight: col.NoFirstLastOnBreak(col.column_spacing)
+							|~1:col.Entablature(col.column_spacing, column_diameter)
 							}
 			|back:Wall
 			|left:split(y){col.columnHeight: NIL
-							|~1:col.Entablature(col.columnSpacing, column_diameter)
+							|~1:col.Entablature(col.column_spacing, column_diameter)
 							}
 			}						
 			

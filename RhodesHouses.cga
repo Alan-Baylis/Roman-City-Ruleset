@@ -371,7 +371,7 @@ split(y){height*n://split(x){'.75:
 					
 Prostas(n,r) -->
 color(column)
-col.NoFirstNoLast(col.columnSpacing*3)//(scope.sx/r)
+col.NoFirstNoLast(col.column_spacing*3)//(scope.sx/r)
 
 Wall -->
 s('1,'1,wallThickness)
