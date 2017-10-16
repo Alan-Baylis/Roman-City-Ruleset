@@ -283,35 +283,13 @@ lastColumn(side)			= split.index == split.total-1 && comp.index == comp.total-1 
 boundaryColumnR				= lastColumn("left") ||  lastColumn("right")
 boundaryColumnL				= firstColumn("left") || firstColumn("right")
 
-#-------Colors
-
-@Group("Colors",25)@Color
-attr base					= "#CDC6AD" 
-@Group("Colors",25)@Color @Range( "#EEEEEE", "#F5F5F5","#FFFFFF","#E0E0D1","#AAAAA0")
-attr wall					=  20% : "#EEEEEE" 20% : "#F5F5F5" 20% : "#FFFFFF" 20% : "#E0E0D1" else : "#AAAAA0" 
-@Group("Colors",25)@Color
-attr wood					=  "#40331B" 
-@Group("Colors",25)@Color @Range( "#EEEEEE", "#F5F5F5","#FFFFFF","#E0E0D1","#AAAAA0")
-attr column					= 20% : "#EEEEEE" 20% : "#F5F5F5" 20% : "#FFFFFF" 20% : "#E0E0D1" else : "#AAAAA0" 
-@Group("Colors",25)@Color
-attr architrave				= "#E8DCC5"
-@Group("Colors",25)@Color
-attr frieze					= "#EBD8B5" 
-@Group("Colors",25)@Color
-attr metopes				= "#DB8C6C"
-@Group("Colors",25)@Color
-attr triglyph				= "#576484" 
-@Group("Colors",25)@Color
-attr cornice				= "#C9C0AD"
-@Group("Colors",25)@Color @Range("#A8763D", "#ff6600",  "#9E4F0E", "#B56A00", "#A3650D", "#AB6118")
-attr roof					= 15% : "#A8763D" 15% : "#9E4F0E" 15% : "#B56A00" 15% : "#A3650D" else : "#AB6118"
-
 ////////////
 ///////START
 
-Lot -->
+Lot --> 
 	t(0,elevation,0)
-		print("width:" + scope.sx)#use to check stylobate dimensions in console
+	//Lot. 							#use to make shape for terrain alignment.
+		print("width:" + scope.sx)	#use to check stylobate dimensions in console
 		print("length:" + scope.sz)
 	Stylobate(scope.sx,scope.sz)
 
@@ -330,10 +308,8 @@ Stylobate(x,z) -->
 		Stylobate1
 
 Stylobate1 -->
-	color(base)
 	Temple
 	t(0,steps*step_height,0)
-	color(wall)
 	Cella(scope.sx)
 	
 ///////THOLOS
@@ -348,8 +324,8 @@ else:
 	
 TholosResized -->
 i(tex.cylinderAsset)
-split(y){baseH:color(base)comp(f){all:TholosBase(comp.index,comp.total)}
-		|columnHeight:color(column)comp(f){all:TholosColonnade(comp.index,comp.total)}
+split(y){baseH:/*color(base)*/comp(f){all:TholosBase(comp.index,comp.total)}
+		|columnHeight:/*color(column)*/comp(f){all:TholosColonnade(comp.index,comp.total)}
 		|entablatureH: comp(f){side:setPivot(xyz,5)col.Entablature(scope.sx,column_diameter)}
 		}
 
@@ -361,7 +337,7 @@ TholosBase(n,y) -->
 TholosColonnade(n,y) -->
 	case n == 0: setPivot(xyz,5)split(x){~1:rotate(abs,pivot,0,-18,0)t(0,0,-column_diameter/4)col.ColumnTile(1,column_diameter,split.total)
 							|~1:NIL}
-	case n == y-1: t(0,0,entablatureH)[reverseNormals tex.Block("wall",tile)]color(roof)roofHip(roof_angle)comp(f){top: rf.TempleRoof(col.column_spacing,roofBrickW,roofBrickH)}
+	case n == y-1: t(0,0,entablatureH)[reverseNormals tex.Block("wall",tile)]/*color(roof)*/roofHip(roof_angle)comp(f){top: rf.TempleRoof(col.column_spacing,roofBrickW,roofBrickH)}
 	
 	case n < 10 && tholos_colonnade == "20": setPivot(xyz,5)split(x){~1:rotate(abs,pivot,0,-18,0)t(0,0,-column_diameter/4)col.ColumnTile(1,column_diameter,split.total)
 							|~1:col.ColumnTile(1,column_diameter,split.total)}
@@ -410,12 +386,12 @@ Stairs -->
 	split(z) {~1: Podium | .001: FrontStairs(scope.sx)}
 	
 Podium -->
-	tex.Block("wall", tile, tile)
+	tex.Block("base", tile, tile)
 
 StairsAround(n) -->
 	case n >= 0 && allSides :
 		[ t(0,step_height,0) StairsAround(n-1) ]
-		offset(n*tread_depth, inside) extrude(step_height) tex.Block("wall",tile)
+		offset(n*tread_depth, inside) extrude(step_height) tex.Block("base",tile)
 	else : 
 		NIL
 
@@ -450,7 +426,7 @@ FrontStairs(n) -->
 	case both:
 		split(x)	{arm_width /*~1*/ :	s('1,'1,front_steps*tread_depth)
 							i("builtin:cube")
-							comp(f)	{all: tex.Block("wall", tile)}
+							comp(f)	{all: tex.Block("base", tile)}
 					|~1 /*n-steps+front_steps*tread_depth*2*/ :	s('1,'1,podium_depth+front_steps*tread_depth)
 															i("builtin:cube")
 															center(x)
@@ -474,7 +450,7 @@ FrontStairs(n) -->
 						tex.Block("wall", tile)
 					}
 
-	else: tex.Block("wall", tile)
+	else: tex.Block("base", tile)
 
 Arm -->
 	case scope.sy>arm_height+step_height:
@@ -482,7 +458,7 @@ Arm -->
 			|~arm_height:s('1,'1,(scope.sy/step_height)*tread_depth)
 					tex.Block("wall",tile)
 			}
-	else: tex.Block("wall",tile)
+	else: tex.Block("base",tile)
 	
 Steps(n) -->
 	 split(y)	{step_height: Step(n) 
@@ -491,7 +467,7 @@ Steps(n) -->
 Step(idx) -->
 	s('1,'1,scope.sz+idx*tread_depth)
 	i("builtin:cube")
-	tex.Block("wall", tile)
+	tex.Block("base", tile)
 		
 ///////CELLA
 
@@ -685,7 +661,7 @@ Cella_WidthAllS(n,o,k,p,r,zDim) -->
 		s('cella_width,scope.sy+(steps*step_height)+entablatureH,scope.sz*(k-1-p-r))
 		center(x)
 		t(0,-baseH,0)
-		split(y){baseH: color(base) tex.Block("wall",tile)
+		split(y){baseH: /*color(base)*/ tex.Block("wall",tile)
 				|~1: comp(f){front:	CellaFront(n,o)
 							|left: 	CellaSide(n)
 							|right: CellaSide(n)
@@ -764,7 +740,6 @@ Entrance -->
 			} 
 
 DoorMain -->  
-	color(wood)
 	t(0,0,-wallThickness*0.15) 
 	split(y){ ~1          : split(x){ doorFrameW : DoorFrame(wallThickness*0.8) | ~1 : Door | doorFrameW : DoorFrame(wallThickness*0.8) } 
 			| doorFrameH  : Wall(wallThickness*0.8) DoorCornice 

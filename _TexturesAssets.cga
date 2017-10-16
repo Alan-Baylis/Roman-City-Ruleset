@@ -21,7 +21,28 @@ attr order_						= "DORIC"
 	const ionic						= order_ == "IONIC"
 	const corinthian				= order_ == "CORINTHIAN"
 
-///////BASIC COLORS
+///////COLORS
+@Group("Colors")@Color
+attr base					= "#CDC6AD" 
+@Group("Colors")@Color @Range( "#EEEEEE", "#F5F5F5","#FFFFFF","#E0E0D1","#AAAAA0")
+attr wall					=  20% : "#EEEEEE" 20% : "#F5F5F5" 20% : "#FFFFFF" 20% : "#E0E0D1" else : "#AAAAA0" 
+@Group("Colors")@Color
+attr wood					=  "#40331B" 
+@Group("Colors")@Color @Range( "#EEEEEE", "#F5F5F5","#FFFFFF","#E0E0D1","#AAAAA0")
+attr column					= 20% : "#EEEEEE" 20% : "#F5F5F5" 20% : "#FFFFFF" 20% : "#E0E0D1" else : "#AAAAA0" 
+@Group("Colors")@Color
+attr architrave				= "#E8DCC5"
+@Group("Colors")@Color
+attr frieze					= "#EBD8B5" 
+@Group("Colors")@Color
+attr metopes				= "#DB8C6C"
+@Group("Colors")@Color
+attr triglyph				= "#576484" 
+@Group("Colors")@Color
+attr cornice				= "#C9C0AD"
+@Group("Colors")@Color @Range("#A8763D", "#ff6600",  "#9E4F0E", "#B56A00", "#A3650D", "#AB6118")
+attr roof					= 15% : "#A8763D" 15% : "#9E4F0E" 15% : "#B56A00" 15% : "#A3650D" else : "#AB6118"
+
 const red = "#ff0000"
 const blue = "#0011ff"
 const cyan = "#34e1fa"
@@ -29,24 +50,25 @@ const green = "#22E01B"
 const pink	= "#FF00DD"
 
 //////TEXTURES
-const floorTex 				= "roof/textures/roof3.jpg"
-const roofTex 				= "roof/textures/roof.bw.jpg"
-const tileTex 				= fileRandom("roof/textures/roof*.jpg")
-const wallTex 				= fileRandom("dirtmaps/dirtmap.*.jpg")
 const test 					= "builtin:uvtest.png"
-const woodTex 				= fileRandom("doors/textures/double_door_1.*.c.jpg")
-const woodTexBW 			= fileRandom("doors/textures/double_door_1.*.c.jpg")
-const blockTex				= "entablature/textures/block.jpg"
-const tallBlockTex			= "entablature/textures/tallBlock.jpg"
-const sandTex				= "ground/ground_2.jpg"
-const pavementTex			= "ground/trav_pavers_bw.jpg"
-const waterTex				= "ground/water.png"
-const groundTex				= fileRandom("ground/ground_*.jpg")
-const groundTexBW			= fileRandom("ground/ground_*_BW.jpg")
-const greenGroundTex		= fileRandom("green/green_0*.jpg")
-const streetTex				= "streets/basaltpavers.jpg"
-const curbTex				= "streets/basaltpavers.jpg"
-const sidewalkTex			= "streets/basaltpavers.jpg"
+const floorTex 				= fileRandom("floor/color/tile.*.jpg")
+const roofTex 				= fileRandom("roof/textures/color/roof.*.jpg")
+const wallTex 				= fileRandom("wall/color/dirtmap.*.jpg")
+const solidWallTex			= "wall/color/dirtmap.01.jpg"
+const baseTex 				= fileRandom("wall/base_color/dirtmap.*.jpg")
+const woodTex 				= fileRandom("doors/textures/color/wood.*.jpg")
+const blockTex				= fileRandom("entablature/textures/color/block.*.jpg")
+const tallBlockTex			= fileRandom("entablature/textures/color/tallBlock.*.jpg")
+//const sandTex				= "ground/ground_2.jpg"
+const pavementTex			= fileRandom("ground/color/pavers.*.jpg")
+//const waterTex				= "ground/water.png"
+const groundTex				= fileRandom("ground/color/ground.*.jpg")
+const grassTex				= "ground/color/ground.03.jpg"
+//const groundTexBW			= fileRandom("ground/bw/ground_*_BW.jpg")
+//const greenGroundTex		= fileRandom("green/green_0*.jpg")
+const streetTex				= "streets/color/basaltpavers.jpg"
+const curbTex				= "streets/color/basaltpavers.jpg"
+const sidewalkTex			= fileRandom("ground/color/pavers.*.jpg")
 
 ///////ASSETS
 ///CELLA
@@ -133,8 +155,7 @@ Block(n) -->
 	comp(f) {all: setupProjection(0,scope.xy,'1,'1)
 			projectUV(0)
 			Texture(n)}
-				
-		
+						
 Block(n,x) -->
 	comp(f) {all: setupProjection(0,scope.xy,x,x)
 			projectUV(0)
@@ -192,21 +213,63 @@ GroundBlock(n,x,k)-->
 	
 
 Texture(n) -->
-	case n == "wall": texture(wallTex)
-	case n == "roof": texture(roofTex)
-	case n == "wood": texture(woodTex)
-	case n == "floor": texture(floorTex)
-	case n == "block": texture(blockTex)
-	case n == "tallBlock": texture(tallBlockTex)
-	case n == "sand": texture(sandTex)
-	case n == "pavement": texture(pavementTex)
-	case n == "water": texture(waterTex)
-	case n == "ground": texture(groundTex)
-	case n == "ground_BW": texture(groundTexBW)
-	case n == "street": texture(streetTex)
-	case n == "curb": texture(curbTex)
-	case n == "sidewalk": texture(sidewalkTex)
-	case n == "green": texture(greenGroundTex)
+	case n == "wall":
+		set(material.name,"wall")
+		texture(wallTex)
+	case n == "solid_wall":
+		set(material.name,"wall")
+		texture(solidWallTex)
+	case n == "base":
+		set(material.name,"base")
+		texture(baseTex)
+	case n == "roof":
+		set(material.name,"roof")
+		texture(roofTex)
+	case n == "wood": 
+		//color(wood)
+		set(material.name,"wood")
+		texture(woodTex)
+	case n == "floor": 
+		set(material.name,"floor")
+		texture(floorTex)
+	case n == "block": 
+		color(wall)
+		set(material.name,"block")
+		texture(blockTex)
+	case n == "tallBlock":
+		color(wall)
+		set(material.name,"block")
+		texture(tallBlockTex)
+//	case n == "sand": 
+//		set(material.name,"sand")
+//		texture(sandTex)
+	case n == "pavement": 
+		set(material.name,"pavement")
+		texture(pavementTex)
+//	case n == "water": 
+//		set(material.name,"water")
+//		texture(waterTex)
+	case n == "ground": 
+		set(material.name,"ground")
+		texture(groundTex)
+	case n == "grass": 
+		set(material.name,"grass")
+		texture(grassTex)
+//	case n == "ground_BW": 
+//		set(material.name,"ground")
+//		texture(groundTex)
+	case n == "street": 
+		set(material.name,"street")
+		texture(streetTex)
+	case n == "curb": 
+		set(material.name,"curb")
+		texture(curbTex)
+	case n == "sidewalk": 
+		set(material.name,"sidewalk")
+		texture(sidewalkTex)
+//	case n == "green": 
+//		set(material.name,"green")
+//		texture(greenGroundTex)
 	
 	else: Texture.
 	
