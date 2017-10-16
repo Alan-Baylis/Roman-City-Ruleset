@@ -70,21 +70,10 @@ const geisonProjection 			= 	column_diameter*col.geisonProjection //column_diame
 #Cornice
 const corniceH					= 	column_diameter*col.corniceH
 
-#-------COLORS
-@Group("Colors",9)@Color
-attr wall					= "#EEEEEE"
-@Group("Colors",9)@Color
-attr cornice				= "#C9C0AD"
-@Group("Colors",9)@Color
-attr roof					= "#A8763D"
-@Group("Colors",9)@Color 
-attr wood					= "#40331B"
-
 ////////////
 ///////START	
 
 TempleRoof(n,w,h) -->
-	color(roof)
 	[t(0,0.15,-0.05)Roof(w,h)]
 	set(trim.vertical,false)
 	split(y){ h*0.02: Antefixes(n,w,h) }
@@ -92,14 +81,12 @@ TempleRoof(n,w,h) -->
 	
 Roof(w,h) -->
 	case highLOD : 
-		color(roof)
 		set(trim.horizontal,true)
 		split(y,noAdjust){ ~h : BottomBrickRow(w) }*
 		split(y,noAdjust){ ~h*0.8 : TopBrickRow(w,h) 
 						 | { ~h   : TopBrickRow(w,h) }*
 						 | ~h*1.2 : TopBrickRow(w,h) }
 	else :
-		color(roof)
 		extrude(roofThickness)
 		tex.Block("roof",4,24)
 
@@ -131,7 +118,6 @@ TopBrick(h) -->
 
 Ridge(offsetX,w,h) -->
 	case highLOD :
-		color(roof) 
 		t(offsetX,0,w*0.1)
 		s(scope.sx-offsetX,w*0.5,w*0.2) center(y) i("builtin:cube") 
 		rotateScope(0,0,-90)
@@ -151,7 +137,6 @@ Antefixes(n,w,h) -->
 
 Antefixa(w,h) -->
 	case antefix == true :
-		color(wall)
 		s(w*0.4,h*0.2,'1) t('-0.5,0,0) i(tex.antefixAsset) Antefixa.
 		tex.WholeBlock("block")
 	else: NIL	
@@ -159,7 +144,6 @@ Antefixa(w,h) -->
 TopAcroteria(w) -->
 case antefix == true :
 	i("builtin:cube")
-	color(wall)
 	s(simaLength/2,MidAcroH/2,MidAcroH)
 	t('-1,0,0)
 	center(y)
@@ -173,7 +157,6 @@ else: NIL
 SideAcroteria(w) -->
 case antefix == true :
 	i("builtin:cube")
-	color(wall)
 	s(simaLength/2,SideAcroH/2,SideAcroH)
 	t('-1,0,0)
 	setPivot(zxy,5)
@@ -256,22 +239,19 @@ RankingGeisons(n,side) -->
  		split(x){ ~ n/4.3: Geison }*		
 	
 Geison -->
-case corinthian:
-	color(cornice)	
+case corinthian:	
 	set(trim.vertical,true) 
 	t(0,0,column_diameter/2)
 	s('1,'1, column_diameter/2) 
 	i(tex.corniceAsset)
 	tex.Block("block")
-else:
-	color(cornice)	
+else:	
 	set(trim.vertical,true) 
 	t(0,0,geisonProjection- column_diameter/2 ) s('1,'1, column_diameter ) 
 	i(tex.geisonAsset)
 	tex.Block("block")
 
 Beam -->
-	color(wood)
 	i("builtin:cube")
 	s('1,column_diameter,column_diameter*1.5)
 	center(y)
@@ -279,8 +259,7 @@ Beam -->
 	tex.Block("wood")
 	
 Ceiling -->
-	reverseNormals
-	color(roof)				
+	reverseNormals		
 	split(y){pedimentWidth-geisonProjection*2: TiltRoof1 |~1: NIL | pedimentWidth-geisonProjection*2:TiltRoof2}
 
 TiltRoof1 -->	

@@ -63,8 +63,8 @@ attr wallThickness = .5
 
 #--------Roof
 
-const roofBrickW 			= col.columnSpacing *0.25
-const roofBrickH 			= col.columnSpacing *0.35
+const roofBrickW 			= col.column_spacing *0.25
+const roofBrickH 			= col.column_spacing *0.35
 
 #-------Time Periods
 

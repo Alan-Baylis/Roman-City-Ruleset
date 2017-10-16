@@ -163,29 +163,6 @@ const geisonProjection 			= 	case corinthian:0
 									else: 0.5 
 
 
-#------COLORS
-
-@Group("Colors",9)@Color
-attr column						= 	"#EEEEEE"
-@Group("Colors",9)@Color
-attr architrave					= 	"#E8DCC5"
-@Group("Colors",9)@Color
-attr frieze						= 	"#EBD8B5"
-@Group("Colors",9)@Color
-attr metopes					= 	"#DB8C6C"
-@Group("Colors",9)@Color
-attr triglyph					= 	"#576484"
-@Group("Colors",9)@Color
-attr cornice					= 	"#C9C0AD"
-
-const blue						= 	"#0066FF"
-const red						= 	"#FF3300"
-const green						= 	"#33CC33"
-const pink						= 	"#FF6699"
-const cyan						= 	"#00FFFF"
-const purple					= 	"#6600CC"
-const orange					= 	"#FF9900"
-
 ///////SETUP  (should be done in importing rule)
 
 Lot -->
@@ -323,7 +300,6 @@ ColumnTile(k,d,i) -->
 		t(-d/2,0,-d-columnOffset)
 		set(trim.vertical,false)
 		s(d,'1,d)
-		color(column)
 		i("builtin:cube")
 		Column(scope.sx,k,i)
 		
@@ -570,12 +546,10 @@ ArchitravesFront(n,i,d)-->
 			
 Architrave(d) -->
 	case tuscan || doric:
-		color(architrave)
 		t(0,0,-d*0.5)
 		split(y){ ~1		: s('1,'1,d) i(tex.architraveAsset) tex.Block("block") 
 				| d*taeniaH	: s('1,'1,d+d*taeniaD*1.5) i(tex.architraveAsset) tex.Block("block") }		
 	else:
-		color(architrave)
 		t(0,0,-d*0.5)
 		split(y){d*lowerFasciaH: Fascia(split.index,d)
 				|d*middleFasciaH: Fascia(split.index,d)
@@ -600,17 +574,15 @@ Frieze(n,d) -->
 		s(scope.sx+d+d*architraveStepDepth*3,'1,'1) 
 		center(x) 
 		s('1,'1,d+d*architraveStepDepth*3) 
-		center(z)
-		color(frieze)  
+		center(z) 
 		i(tex.friezeAsset)
 		tex.Block("wall", tile)
 
 Metopes(d) -->
 	s('1,'1,d+ d*triglyphW /15) center(z)  
-	i(tex.friezeAsset) color(metopes) tex.Block("wall", tile)
+	i(tex.friezeAsset) tex.Block("wall", tile)
 
 Triglyphs(n,d) --> 
-	color(triglyph)
 	t(0,0,-0.007) 
 	split(x){ d*triglyphW : s('1,'1,d*triglyphD) i("builtin:cube") TriglyphWithGuttae(d) 
 			| { ~ n : split(x){~1:NIL 
@@ -649,10 +621,8 @@ Dentils(d) -->
 	
 Dentil(d) -->
 	case lowLOD:
-		color(frieze)
 		tex.WholeBlock("block")
 	else:
-		color(frieze)
 		s('1,'1,d*dentilD)
 		i("builtin:cube")
 		tex.WholeBlock("block")
@@ -669,14 +639,12 @@ Geisons(n,d) -->
 
 Geison(d)  -->
 case corinthian:
-	color(cornice)	
 	set(trim.vertical,true) 
 	t(0,0,d/2)
 	s('1,'1, d/2) 
 	i(tex.corniceAsset) 
 	tex.Block("block")
-else:
-	color(cornice)	
+else:	
 	set(trim.vertical,true) 
 	t(0,0,-d*geisonProjection) 
 	s('1,'1, d+d*geisonProjection ) 
@@ -689,7 +657,6 @@ Mutule(n,d) -->
 		NIL
 	else:
 		set(trim.vertical,true) 
-		color(triglyph)
 		t(0,0,d/2+d*geisonProjection*0.2) 
 		s('d*triglyphW/( n /4),d*geisonProjection*0.25,d*geisonProjection*0.65) center(x)
 		r(scopeCenter,8,0,0)

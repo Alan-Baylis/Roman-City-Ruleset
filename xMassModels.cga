@@ -10,7 +10,7 @@ import col: "_Colonnade.cga"
 import alt: "Altar.cga"
 import gym: "Gymnasium.cga"
 import tex : "_TexturesAssets.cga"
-import mb: "MarketBasilica.cga"
+import mb: "Basilica.cga" (type = "MARKET")
 import aq: "Aqueduct.cga"
 
 #-------Scene Settings			
