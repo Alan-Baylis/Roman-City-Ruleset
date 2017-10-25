@@ -6,8 +6,13 @@
 
 version "2011.2"
 
+@Hidden 
 import tex : "_TexturesAssets.cga"
+
+@Hidden 
 import col : "_Colonnade.cga"
+
+@Hidden 
 import rf: "_Roof.cga"
 
 #-------Scene Settings
@@ -28,29 +33,6 @@ attr LOD					= "LOW"
 	const highLOD 				= LOD == "HIGH"
 	const medLOD				= LOD == "MED"
 	const lowLOD				= LOD == "LOW"
-	
-#--------Materials
-	
-@Group ("Materials",1) @Range("Under Construction","Brick","Travertine", "Marble", "None", "Varied")
-attr Material				= 	case noMaterials && YEAR >= start_date && YEAR <= end_date: "Varied"
-								case materials && YEAR >= construction_start && YEAR <=construction_end: "Under Construction"
-								case materials && YEAR >= brick_start && YEAR <=brick_end: "Brick"
-								case materials && YEAR >= travertine_start && YEAR <=travertine_end: "Travertine"
-								case materials && YEAR >= marble_start && YEAR <=marble_end: "Marble"
-								else: "None"
-								
-	const constr				= Material == "Under Construction" 
-	const brick					= Material == "Brick"
-	const trav					= Material == "Travertine"
-	const marble				= Material == "Marble"
-	const noModel				= Material == "None"
-		
-
-const MaterialColor			= 	case constr: construction_color
-								case brick: brick_color
-								case trav: travertine_color
-								case marble: marble_color							
-								else: wall
 
 #--------General
 	
@@ -122,53 +104,6 @@ const tile 					= 5
 const roofBrickW = col.column_spacing *0.25
 const roofBrickH = col.column_spacing *0.35
 
-#-------Time Periods
-
-@Group ("Time Period",8) @Order(0) @Range(-800,300)
-attr start_date	= 0
-@Group ("Time Period",8) @Order(0) @Range(-800,300)
-attr end_date	= 0
-@Group ("Time Period",8) @Order(1) @Range(-800,300)
-attr construction_start	= 0
-@Group ("Time Period",8) @Order(2) @Range(-800,300)
-attr construction_end	= 0
-@Group ("Time Period",8) @Order(3) @Range(-800,300)
-attr brick_start		= 0
-@Group ("Time Period",8) @Order(4) @Range(-800,300)
-attr brick_end			= 0
-@Group ("Time Period",8) @Order(5) @Range(-800,300)
-attr travertine_start	= 0
-@Group ("Time Period",8) @Order(6) @Range(-800,300)
-attr travertine_end		= 0
-@Group ("Time Period",8) @Order(7) @Range(-800,300)
-attr marble_start       = 0
-@Group ("Time Period",8) @Order(8) @Range(-800,300)
-attr marble_end			= 0
-
-#-------Colors
-@Group("Colors",9)@Range( "#EEEEEE", "#F5F5F5","#FFFFFF","#E0E0D1","#AAAAA0")
-attr wall					= case noMaterials  || materials && noModel: 20% : "#EEEEEE" 20% : "#F5F5F5" 20% : "#FFFFFF" 20% : "#E0E0D1" else : "#AAAAA0" else: MaterialColor
-@Group("Colors",9)@Range("#A8763D", "#ff6600",  "#9E4F0E", "#B56A00", "#A3650D", "#AB6118")
-attr roof					= case noMaterials  || materials && noModel: 15% : "#A8763D" 15% : "#9E4F0E" 15% : "#B56A00" 15% : "#A3650D" else : "#AB6118" else: MaterialColor
-@Group ("Colors",9)
-attr ground					= case noMaterials  || materials && noModel: "#ADB38F" else: MaterialColor
-
-const construction_color	= "#F7EB9E" 
-const brick_color			= "#705C46" 
-const travertine_color		= "#E2E8D1" 
-const marble_color			= "#F79E9E"
-
-const blue					= "#0066FF"
-const red					= "#FF3300"
-const green					= "#33CC33"
-const pink					= "#FF6699"
-const cyan					= "#00FFFF"
-const purple				= "#6600CC"
-const orange				= "#FF9900"
-
-
-
-
 
 ###########__START__#############
 
@@ -181,14 +116,13 @@ const orange				= "#FF9900"
 
 
 Lot -->
-case !noModel:
 	t(0,elevation,0)
 	//Lot.
 	///*
 	extrude(seatHeight*(tier1_rows+tier2_rows)+orchestraPodiumH+sphendoneH+sphendone2H)
-	comp(f) { bottom:reverseNormals color(ground)tex.Block("ground",5) | front: NIL | top: NIL |all = AllSides}
+	comp(f) { bottom:reverseNormals tex.Block("ground",5) | front: NIL | top: NIL |all = AllSides}
 	//*/
-else: NIL
+
 
 AllSides -->
 	comp(f) {all: Sides(comp.index, comp.total) print(comp.total)}
@@ -279,11 +213,10 @@ split(x){kerkisWidth:StraightRows |stairWidth: StraightStairs|~1:split(x){~kerki
 Rows -->
 case sphendoneType == "Flat" || sphendoneType == "Colonnaded":
 	s('1,scope.sy+sphendone2H,'1)
-	color(wall)
+
 	split(y){orchestraPodiumH: reverseNormals Row(split.index,split.total)|{~seatHeight: Row(split.index,split.total)}*|sphendoneH: SphendoneD2|sphendone2H: NIL|sphendone2H: NIL}
 else:
 	s('1,scope.sy+sphendone2H,'1)
-	color(wall)
 	split(y){orchestraPodiumH: reverseNormals Row(split.index,split.total)|{~seatHeight: Row(split.index,split.total)}*|sphendoneH: SphendoneD2|sphendone2H:SphendoneD3|sphendone2H: SphendoneD4}
 
 Row(n,z) -->
@@ -321,7 +254,6 @@ Row(n,z) -->
 ###########__ROWS_STRAIGHT__#############
 
 StraightRows -->
-	color(wall)
 	split(y){orchestraPodiumH: reverseNormals StraightRow(split.index,split.total)|{~seatHeight: StraightRow(split.index,split.total)}*|sphendoneH: SphendoneD2Straight|sphendone2H: NIL}
 
 StraightRow(n,z) -->
@@ -359,7 +291,6 @@ StraightRow(n,z) -->
 ###########__END_ROWS__#############
 
 EndRows -->
-	color(wall)
 	split(y){orchestraPodiumH: reverseNormals EndRow(split.index)|{~seatHeight: EndRow(split.index)}* |sphendoneH: SphendoneD1|sphendone2H: NIL}
 
 
@@ -401,8 +332,6 @@ SeatEnd -->
 ###########__STAIRS__#############	
 
 Stairs -->
-
-	color(wall)
 	split(y){orchestraPodiumH: reverseNormals Steps(split.index,split.total)|{~seatHeight: Steps(split.index,split.total)}*|sphendoneH: SphendoneD2 |sphendone2H: NIL}
 
 	
@@ -444,12 +373,10 @@ Steps(n,y) -->
 StadiumStairs -->
 case sphendoneType == "Flat" || sphendoneType == "Colonnaded":
 	s('1,scope.sy+sphendone2H,'1)
-	color(wall)
 	split(y){orchestraPodiumH: reverseNormals StadiumSteps(split.index,split.total)|{~seatHeight: StadiumSteps(split.index,split.total)}*|sphendoneH: SphendoneD2|sphendone2H: NIL|sphendone2H: NIL }
 
 else:
 	s('1,scope.sy+sphendone2H,'1)
-	color(wall)
 	split(y){orchestraPodiumH: reverseNormals StadiumSteps(split.index,split.total)|{~seatHeight: StadiumSteps(split.index,split.total)}*|sphendoneH: SphendoneD2|sphendone2H: SphendoneD3|sphendone2H:SphendoneD4 }
 	
 StadiumSteps(n,y) -->
@@ -491,11 +418,9 @@ StadiumSteps(n,y) -->
 UpperStairs -->
 case sphendoneType == "Flat" || sphendoneType == "Colonnaded":
 	s('1,scope.sy+sphendone2H,'1)
-	color(wall)
 	split(y){orchestraPodiumH: reverseNormals UpperSteps(split.index,split.total)|{~seatHeight: UpperSteps(split.index,split.total)}*|sphendoneH: SphendoneD2|sphendone2H: NIL |sphendone2H: NIL }
 else:
 	s('1,scope.sy+sphendone2H,'1)
-	color(wall)
 	split(y){orchestraPodiumH: reverseNormals UpperSteps(split.index,split.total)|{~seatHeight: UpperSteps(split.index,split.total)}*|sphendoneH: SphendoneD2|sphendone2H: SphendoneD3|sphendone2H: SphendoneD4 }
 	
 UpperSteps(n,y) -->
@@ -534,8 +459,6 @@ UpperSteps(n,y) -->
 ###########__STAIRS_STRAIGHT__#############	
 
 StraightStairs -->
-
-	color(wall)
 	split(y){orchestraPodiumH: reverseNormals StraightSteps(split.index,split.total)|{~seatHeight: StraightSteps(split.index,split.total)}*|sphendoneH: SphendoneD2Straight|sphendone2H: NIL }
 
 	
@@ -575,7 +498,6 @@ StraightSteps(n,y) -->
 ###########__END_STAIRS__#############	
 
 EndStairs -->
-	color(wall)
 	split(y){orchestraPodiumH: reverseNormals EndSteps(split.index)|{~seatHeight: EndSteps(split.index)}*|sphendoneH: SphendoneD1End |sphendone2H: NIL}
 
 	
@@ -608,7 +530,6 @@ EndSteps(n) -->
 ###########__END_STAIRS_D2_#############	
 
 EndStairsD2 -->
-	color(wall)
 	split(y){orchestraPodiumH: reverseNormals EndStepsD2(split.index, split.total)|{~seatHeight: EndStepsD2(split.index, split.total)}*|sphendoneH: EndSphendoneD2|sphendone2H: NIL}
 
 	
@@ -657,11 +578,9 @@ EndStepsD2(n,y) -->
 EndStairsD2NoWall -->
 case sphendoneType == "Flat" || sphendoneType == "Colonnaded":
 	s('1,scope.sy+sphendone2H,'1)
-	color(wall)
 	split(y){orchestraPodiumH: reverseNormals EndStepsD2NoWall(split.index, split.total)|{~seatHeight: EndStepsD2NoWall(split.index, split.total)}*|sphendoneH: EndSphendoneD2|sphendone2H: NIL|sphendone2H: NIL}
 else:
 	s('1,scope.sy+sphendone2H,'1)
-	color(wall)
 	split(y){orchestraPodiumH: reverseNormals EndStepsD2NoWall(split.index, split.total)|{~seatHeight: EndStepsD2NoWall(split.index, split.total)}*|sphendoneH: EndSphendoneD2| sphendone2H: s(kerkisWidth/2,'1,'1) SphendoneD3|sphendone2H: SphendoneD4}
 	
 EndStepsD2NoWall(n,y) -->
@@ -700,7 +619,6 @@ EndStepsD2NoWall(n,y) -->
 ###########__END_STAIRS_D2_STRAIGHT#############	
 
 EndStairsD2Straight -->
-	color(wall)
 	split(y){orchestraPodiumH: reverseNormals EndStepsD2Straight(split.index, split.total)|{~seatHeight: EndStepsD2Straight(split.index, split.total)}*|sphendoneH: EndSphendoneD2Straight|sphendone2H: NIL}
 
 	
@@ -749,7 +667,6 @@ EndStepsD2Straight(n,y) -->
 ###########__END_STAIRS_LEFT_D2_#############	
 
 EndStairsLeftD2 -->
-	color(wall)
 	split(y){orchestraPodiumH: reverseNormals mirrorScope(true,false,false)EndStepsLeftD2(split.index, split.total)|{~seatHeight:mirrorScope(true,false,false) EndStepsLeftD2(split.index, split.total)}*|sphendoneH:mirrorScope(true,false,false) EndSphendoneD2Left|sphendone2H: NIL}
 
 	
@@ -798,11 +715,10 @@ EndStepsLeftD2(n,y) -->
 EndStairsLeftD2NoWall -->
 case sphendoneType == "Flat" || sphendoneType == "Colonnaded":
 	s('1,scope.sy+sphendone2H,'1)
-	color(wall)
 	split(y){orchestraPodiumH: reverseNormals mirrorScope(true,false,false)EndStepsLeftD2NoWall(split.index, split.total)|{~seatHeight:mirrorScope(true,false,false) EndStepsLeftD2NoWall(split.index, split.total)}*|sphendoneH:mirrorScope(true,false,false) EndSphendoneD2Left| sphendone2H: NIL| sphendone2H: NIL}
 else:
 	s('1,scope.sy+sphendone2H,'1)
-	color(wall)
+
 	split(y){orchestraPodiumH: reverseNormals mirrorScope(true,false,false)EndStepsLeftD2NoWall(split.index, split.total)|{~seatHeight:mirrorScope(true,false,false) EndStepsLeftD2NoWall(split.index, split.total)}*|sphendoneH:mirrorScope(true,false,false) EndSphendoneD2Left| sphendone2H: s(kerkisWidth/2,'1,'1)t(-scope.sx,0,0)SphendoneD3|sphendone2H:SphendoneD4}
 
 EndStepsLeftD2NoWall(n,y) -->
@@ -841,7 +757,6 @@ EndStepsLeftD2NoWall(n,y) -->
 ###########__END_STAIRS_LEFT_D2_STRAIGHT#############	
 
 EndStairsLeftStraightD2 -->
-	color(wall)
 	split(y){orchestraPodiumH: reverseNormals mirrorScope(true,false,false)EndStepsLeftStraightD2(split.index, split.total)|{~seatHeight:mirrorScope(true,false,false) EndStepsLeftStraightD2(split.index, split.total)}*|sphendoneH:mirrorScope(true,false,false) EndSphendoneLeftD2Straight|sphendone2H: NIL}
 
 	
@@ -891,7 +806,6 @@ EndStepsLeftStraightD2(n,y) -->
 ###########__END_STAIRS_LEFT__#############	
 
 EndStairsLeft -->
-	color(wall)
 	split(y){orchestraPodiumH: reverseNormals mirrorScope(true,false,false) EndStepsLeft(split.index)|{~seatHeight:mirrorScope(true,false,false) EndStepsLeft (split.index)}* |sphendoneH:mirrorScope(true,false,false)  SphendoneD1LeftEnd|sphendone2H: NIL}
 
 	
@@ -922,7 +836,6 @@ EndStepsLeft(n) -->
 ###########__END_STAIRS_UPPER__#############	
 
 EndStairsUpper -->
-	color(wall)
 	split(y){orchestraPodiumH: reverseNormals EndStepsUpper(split.index,split.total)|{~seatHeight: EndStepsUpper(split.index,split.total)}*|sphendoneH: EndSphendoneD2|sphendone2H: NIL }
 
 	
@@ -971,7 +884,6 @@ EndStepsUpper(n,y) -->
 ###########__END_STAIRS_UPPER_LEFT__#############	
 
 EndStairsUpperLeft -->
-	color(wall)
 	split(y){orchestraPodiumH: reverseNormals  mirrorScope(true,false,true)  EndStepsUpperLeft(split.index,split.total)|{~seatHeight: mirrorScope(true,false,true) EndStepsUpperLeft(split.index,split.total)}*|sphendoneH: mirrorScope(true,false,true)EndSphendoneD2Left |sphendone2H: NIL}
 
 	
@@ -1058,7 +970,6 @@ UpperAngledWallLeft -->
 extrude(-d1H-seatHeight)Block
 
 Block -->
-	color(wall)
 	tex.Block("wall",tile)
 	
 ###########__SPHENDONE__#############	
@@ -1232,11 +1143,10 @@ ColonnadeEndLeft -->
 Roof -->
 	roofGable(10,0,0,false,1)
 	comp(f){side:Block
-			|top:color(roof)rf.Roof(roofBrickW,roofBrickH)
+			|top:rf.Roof(roofBrickW,roofBrickH)
 			|bottom:Block}
 			
 Wall -->
-	color(wall)
 	extrude (-col.column_diameter)
 	tex.Block("wall",col.columnHeight)
 	

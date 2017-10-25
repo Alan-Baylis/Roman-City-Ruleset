@@ -6,16 +6,21 @@
 
 version "2013.1"
 
+@Hidden 
 import col : "_Colonnade.cga"
-import dom : "Domus.cga" (houseType = "ROMAN SHOPS", redWall_on = false)		
-import rf:   "_Roof.cga"	
+
+@Hidden 
+import dom : "Domus.cga" (houseType = "ROMAN SHOPS", redWall_on = false)
+
+@Hidden 		
+import rf:   "_Roof.cga"
+
+@Hidden 	
 import tex : "_TexturesAssets.cga"	
 
 
 #-------Scene Settings			
 
-@Group("SceneSettings",0)
-attr elevation 	= 0
 
 @Group("SceneSettings",0)@Range("HIGH","MED","LOW")
 attr LOD					= "LOW"
@@ -27,6 +32,9 @@ attr LOD					= "LOW"
 attr groundType				= "Gravel"
 
 #-------General
+
+@Group("General",2)
+attr elevation 	= 0
 
 @Group("General",2)@Range("TUSCAN","DORIC","IONIC","CORINTHIAN")
 attr order_						= "DORIC"
@@ -198,68 +206,6 @@ const railingH				= 1
 const tile					= columnHeight
 const streetTexTile 		= 5
 
-#-------Time Periods
-
-@Group ("Time Period",10) @Order(0) @Range(-800,300)
-attr start_date	= 0
-@Group ("Time Period",10) @Order(0) @Range(-800,300)
-attr end_date	= 0
-@Group ("Time Period",10) @Order(1) @Range(-800,300)
-attr construction_start	= 0
-@Group ("Time Period",10) @Order(2) @Range(-800,300)
-attr construction_end	= 0
-@Group ("Time Period",10) @Order(3) @Range(-800,300)
-attr brick_start		= 0
-@Group ("Time Period",10) @Order(4) @Range(-800,300)
-attr brick_end			= 0
-@Group ("Time Period",10) @Order(5) @Range(-800,300)
-attr travertine_start	= 0
-@Group ("Time Period",10) @Order(6) @Range(-800,300)
-attr travertine_end		= 0
-@Group ("Time Period",10) @Order(7) @Range(-800,300)
-attr marble_start       = 0
-@Group ("Time Period",10) @Order(8) @Range(-800,300)
-attr marble_end			= 0
-
-#-------Colors
-
-@Group("Colors",11)
-attr base					= "#CDC6AD"
-@Group("Colors",11)@Range( "#EEEEEE", "#F5F5F5","#FFFFFF","#E0E0D1","#AAAAA0")
-attr wall					= 20% : "#F5F5F5" 20% : "#FFFFFF" 20% : "#E0E0D1" else : "#AAAAA0" 
-@Group("Colors",11)
-attr wood					= "#40331B" 
-@Group("Colors",11)@Range( "#EEEEEE", "#F5F5F5","#FFFFFF","#E0E0D1","#AAAAA0")
-attr column					= 20% : "#EEEEEE" 20% : "#F5F5F5" 20% : "#FFFFFF" 20% : "#E0E0D1" else : "#AAAAA0"
-attr architrave				= "#E8DCC5" 
-@Group("Colors",11)
-attr frieze					= "#EBD8B5" 
-@Group("Colors",9)
-attr metopes				= "#EBD8B5"
-@Group("Colors",9)
-attr triglyph				= "#B5B59F"
-@Group("Colors",11)
-attr cornice				= "#C9C0AD" 
-@Group("Colors",11)@Range("#A8763D", "#ff6600",  "#9E4F0E", "#B56A00", "#A3650D", "#AB6118")
-attr roof					= 15% : "#A8763D" 15% : "#9E4F0E" 15% : "#B56A00" 15% : "#A3650D" else : "#AB6118"
-@Group ("Colors",11)
-attr floor					= "#A68F74" 
-@Group ("Colors",11)
-attr ground					= "#ADB38F"
-
-const construction_color	= "#F7EB9E" 
-const brick_color			= "#705C46" 
-const travertine_color		= "#E2E8D1" 
-const marble_color			= "#F79E9E"
-
-const blue					= "#0066FF"
-const red					= "#FF3300"
-const green					= "#33CC33"
-const pink					= "#FF6699"
-const cyan					= "#00FFFF"
-const purple				= "#6600CC"
-const orange				= "#FF9900"
-
 
 ///////////
 //////START
@@ -268,20 +214,20 @@ Shops -->
 case noPorticus == true:
 	t(0,elevation,0)
 	extrude(height)
-	split(y){baseHeight:color(base)t(0,-extra_steps_down*step_height,0)
-					comp(f){top:color(floor)tex.Block("floor",.5)
+	split(y){baseHeight:t(0,-extra_steps_down*step_height,0)
+					comp(f){top:tex.Block("floor",.5)
 							|front: Steps
 							|left:Wall
 							|right:Wall
 							|back: Wall}
-			|~1:color(wall)split(z){shopDepth:comp(f){front:dom.LowerFacade(rint(rand(-.5,1.5)),"front")
+			|~1:split(z){shopDepth:comp(f){front:dom.LowerFacade(rint(rand(-.5,1.5)),"front")
 											|left:Wall
 											|right:Wall
 											|back:Wall}
 											//|top:Roof}
 									|~1: NIL}
 			|entablatureH: comp(f){side:Entablature
-									|top:Ceiling [color(floor)tex.Block("floor",.5)]Roof1}
+									|top:Ceiling [tex.Block("floor",.5)]Roof1}
 									
 			}
 else:	Lot
@@ -291,12 +237,14 @@ case offset:
 	t(0,elevation,0)
 	innerRect
 	[offset(-stoaDepth)t(0,ground_height,0) OffsetStoa]
-	extrude(ground_height)color (ground) GroundTexture
+	extrude(ground_height) GroundTexture
 case single:
+	//t(0,elevation,0) Lot.
 	alignScopeToAxes(y)
 	SegmentStoa(scope.sy)
 case linear: 	
 	t(0,elevation,0)
+	//Lot.
 	LinearStoa
 else: NIL
 
@@ -311,21 +259,20 @@ else: tex.Block("green")
 OffsetStoa  --> comp(f) { inside: NIL | border: OffsetStoa2 }
 
 OffsetStoa2 -->
-color(base)
 extrude(baseHeight)
 t(0,-extra_steps_down*step_height,0)
 comp(f) {4: Steps 
 		|1: extrude(stoaHeight)
-			comp(f) {1: color (roof)Roof 
+			comp(f) {1: Roof 
 					|4: split(y){col.columnHeight: OffsetColonnade
 								|~1:Entablature}
-					|2: color(wall) OffsetWall
-					|0: [t(0,0,-columnHeight)offset(-column_diameter,inside)color(roof) tex.Block("roof",4,24)] reverseNormals color(floor) tex.Block("floor",.5) }
+					|2: OffsetWall
+					|0: [t(0,0,-columnHeight)offset(-column_diameter,inside)tex.Block("roof",4,24)] reverseNormals tex.Block("floor",.5) }
 		|2: Wall}
 
 OffsetColonnade -->
-case columns: color(column)col.NoFirstLastOnCorner(columnSpacing)
-else: color(wall)col.OffsetArcade
+case columns: col.NoFirstLastOnCorner(columnSpacing)
+else: col.OffsetArcade
 		
 OffsetWall -->
 case shops: ShopWalls
@@ -346,21 +293,20 @@ else: Wall
 # n == y-1 		= last side
 		
 LinearStoa -->
-color(base)
 extrude(baseHeight)
 t(0,-extra_steps_down*step_height,0)
 comp(f){all: LinearBaseSide(comp.index, comp.total)}
 
 LinearBaseSide(n,y) -->
-case n == 1: 				extrude(stoaHeight) comp(f) {all: color(wall)LinearSide(comp.index, comp.total)}
-case n <= sides && n>1: 	color(base) tex.Block("wall",tile)
-case n > sides && n<y-1 : 	color(base) Steps
+case n == 1: 				extrude(stoaHeight) comp(f) {all: LinearSide(comp.index, comp.total)}
+case n <= sides && n>1: 	tex.Block("base",tile)
+case n > sides && n<y-1 : 	Steps
 case n == y-1:				StepsEnd
 else: 						NIL
 
 LinearSide(n,y) -->
-case n == 0: reverseNormals color(floor) tex.Block("floor",.5) #Floor
-			reverseNormals t(0,0,-columnHeight)offset(-column_diameter,inside)color(roof) tex.Block("roof",4,24) #Ceiling
+case n == 0: reverseNormals tex.Block("floor",.5) #Floor
+			reverseNormals t(0,0,-columnHeight)offset(-column_diameter,inside)tex.Block("roof",4,24) #Ceiling
 		//	reverseNormals t(0,0,-entablatureH)color(floor) tex.Block("floor",.5) #Flat Roof
 case n == 1: Roof #Roof
 case !shops && n>2 && n < sides: Walls #Back Walls
@@ -369,11 +315,11 @@ case n == sides && left == "colonnade" && columns:  split(y){~1: s(scope.sx-shop
 case n == sides && left == "colonnade" && arches:  split(y){~1: s(scope.sx-shopDepth,'1,'1)t(shopDepth,0,0)col.LinearArcade|entablatureH: Entablature} #start end arcade (left)
 case n == sides && left == "open": split(y){~1: NIL|entablatureH: Entablature} #start end open(left)
 case n == sides && left == "wall": split(y){~1: s(scope.sx-shopDepth,'1,'1)t(shopDepth,0,0) Wall|entablatureH: Entablature} #start end wall (left)
-case n == sides+1 && n < y-1 && columns && left != "colonnade": split(y){~1: color(column) col.FirstFlushLastOnBreak(columnSpacing)|entablatureH: Entablature} #ColonnadeMiddle (first inner side)
-case n == sides+1 && n < y-1 && columns && left == "colonnade": split(y){~1: color(column) col.NoFirstLastOnBreak(columnSpacing)|entablatureH: Entablature} #ColonnadeMiddle (first inner side)
-case n > sides+1 && n < y-1 && columns: split(y){~1: color(column) col.NoFirstLastOnBreak(columnSpacing)|entablatureH: Entablature} #ColonnadeMiddle 
-case n == y-1 && columns && right == "colonnade": split(y){~1: color(column) col.NoFirstNoLast(columnSpacing)|entablatureH: Entablature} #ColonnadeMiddle (last inner side)
-case n == y-1 && columns && right != "colonnade": split(y){~1: color(column) col.NoFirstLastFlush(columnSpacing)|entablatureH: Entablature} #ColonnadeMiddle (last inner side)
+case n == sides+1 && n < y-1 && columns && left != "colonnade": split(y){~1: col.FirstFlushLastOnBreak(columnSpacing)|entablatureH: Entablature} #ColonnadeMiddle (first inner side)
+case n == sides+1 && n < y-1 && columns && left == "colonnade": split(y){~1: col.NoFirstLastOnBreak(columnSpacing)|entablatureH: Entablature} #ColonnadeMiddle (first inner side)
+case n > sides+1 && n < y-1 && columns: split(y){~1: col.NoFirstLastOnBreak(columnSpacing)|entablatureH: Entablature} #ColonnadeMiddle 
+case n == y-1 && columns && right == "colonnade": split(y){~1: col.NoFirstNoLast(columnSpacing)|entablatureH: Entablature} #ColonnadeMiddle (last inner side)
+case n == y-1 && columns && right != "colonnade": split(y){~1: col.NoFirstLastFlush(columnSpacing)|entablatureH: Entablature} #ColonnadeMiddle (last inner side)
 case n > sides && n <= y-1 && arches: split(y){~1: col.LinearArcade|entablatureH: Entablature} #ArcadeMiddle 
 case n == 2 && right == "colonnade" && columns: split(y){~1: s(scope.sx-shopDepth,'1,'1)col.FirstLastFlush(columnSpacing)|entablatureH: Entablature} #last end colonnade (right)(columns)
 case n == 2 && right == "colonnade" && arches: split(y){~1: s(scope.sx-shopDepth,'1,'1)col.LinearArcadeEnd|entablatureH: Entablature} #last end arcade (right)(columns)
@@ -392,7 +338,6 @@ case yDim > 0:
 else:t(0,elevation,0)
 	extrude(stoaHeight+baseHeight)
 	t(0,-extra_steps_down*step_height,0)
-	color(base)
 	split(y){baseHeight: comp(f){front:StepsType(scope.sy/step_height)
 								|back: BackStepsType(scope.sy/step_height)
 								|left: LeftStepsType(scope.sy/step_height) 
@@ -401,21 +346,20 @@ else:t(0,elevation,0)
 
 SegmentBase(yDim) -->
 comp(f){top:extrude(stoaHeight) SegmentSides
-		|front: color(base)StepsType(scope.sy/step_height)| side:color(base) Wall}
+		|front: StepsType(scope.sy/step_height)| side:Wall}
 
 			
 SegmentSides -->
-color(wall)
-split(y){columnHeight:split(z){shopDepth:color(wall)comp(f){front:s('1,scope.sy+entablatureH-.1,'1)dom.LowerFacade(rint(rand(-.5,1.5)),"front")
+split(y){columnHeight:split(z){shopDepth:comp(f){front:s('1,scope.sy+entablatureH-.1,'1)dom.LowerFacade(rint(rand(-.5,1.5)),"front")
 															|back:Wall
 															|left: Wall
 															|right:Wall
-															|bottom: reverseNormals color(floor) tex.WholeBlock("floor",.5)}
+															|bottom: reverseNormals tex.WholeBlock("floor",.5)}
 								|~1:comp(f)	{front: FrontSide
 											|left: 	LeftSide
 											|right: RightSide
 											|back: 	BackSide
-											|bottom:reverseNormals color(floor) tex.WholeBlock("floor",.5)}	 			
+											|bottom:reverseNormals tex.WholeBlock("floor",.5)}	 			
 								}
 		|~1:  comp(f){front:FrontEntablature(scope.sx)
 					|left: Entablature
@@ -432,11 +376,11 @@ FrontSide -->
 	case start && left != "wall" && columns && !propylon: col.FirstFlushLastOnBreak(columnSpacing)
 	case last && right != "wall" && columns && !propylon: col.NoFirstLastFlush(columnSpacing)
 	case last && right == "wall" && columns && !propylon: col.NoFirstNoLast(columnSpacing)
-	case standalone && right != "wall" 	&& left != "wall" && columns && !propylon: 	color(column) col.FirstLastFlush(columnSpacing)	 
-	case standalone && right == "wall" 	&& left != "wall" && columns && !propylon: 	color(column) col.FirstFlushNoLast(columnSpacing)
-	case standalone && right != "wall"	&& left == "wall" && columns && !propylon: 	color(column) col.NoFirstLastFlush(columnSpacing)	 
-	case standalone && right == "wall" 	&& left == "wall" && columns && !propylon: 	color(column) col.NoFirstNoLast(columnSpacing)
-	case middle  && columns && !propylon: 	color(column) col.NoFirstLastOnBreak(columnSpacing)
+	case standalone && right != "wall" 	&& left != "wall" && columns && !propylon: 	 col.FirstLastFlush(columnSpacing)	 
+	case standalone && right == "wall" 	&& left != "wall" && columns && !propylon: 	 col.FirstFlushNoLast(columnSpacing)
+	case standalone && right != "wall"	&& left == "wall" && columns && !propylon: 	 col.NoFirstLastFlush(columnSpacing)	 
+	case standalone && right == "wall" 	&& left == "wall" && columns && !propylon: 	 col.NoFirstNoLast(columnSpacing)
+	case middle  && columns && !propylon: 	 col.NoFirstLastOnBreak(columnSpacing)
 	case arches && start : s(scope.sx-col.archColumnBaseW/2,'1,'1) t(col.archColumnBaseW/2,0,0)col.ArcadeStart
 	case arches && standalone: s(scope.sx-col.archColumnBaseW,'1,'1) center(x) col.ArcadeStart
 	case arches && !start || arches && !standalone:s(scope.sx-col.archColumnBaseW/2,'1,'1) col.Arcade
@@ -473,11 +417,11 @@ BackSide -->
 	case back == "colonnade" && start && left == "open" && columns && !propylon: col.FirstOnBreakLastFlush(columnSpacing)
 	case back == "colonnade" && last && right != "open" && columns && !propylon: col.NoFirstNoLast(columnSpacing)
 	case back == "colonnade" && last && right == "open" && columns && !propylon: col.FirstFlushNoLast(columnSpacing)
-	case back == "colonnade" && standalone && right != "open" 	&& left != "open" && columns && !propylon: 	color(column) col.NoFirstNoLast(columnSpacing)	 
-	case back == "colonnade" && standalone && right == "open" 	&& left != "open" && columns && !propylon: 	color(column) col.FirstFlushNoLast(columnSpacing)
-	case back == "colonnade" && standalone && right != "open"	&& left == "open" && columns && !propylon: 	color(column) col.NoFirstLastFlush(columnSpacing)	 
-	case back == "colonnade" && standalone && right == "open" 	&& left == "open" && columns && !propylon: 	color(column) col.FirstLastFlush(columnSpacing)
-	case back == "colonnade" && middle && columns && !propylon : 	color(column) col.FirstOnBreakNoLast(columnSpacing)
+	case back == "colonnade" && standalone && right != "open" 	&& left != "open" && columns && !propylon: 	 col.NoFirstNoLast(columnSpacing)	 
+	case back == "colonnade" && standalone && right == "open" 	&& left != "open" && columns && !propylon: 	 col.FirstFlushNoLast(columnSpacing)
+	case back == "colonnade" && standalone && right != "open"	&& left == "open" && columns && !propylon: 	 col.NoFirstLastFlush(columnSpacing)	 
+	case back == "colonnade" && standalone && right == "open" 	&& left == "open" && columns && !propylon: 	 col.FirstLastFlush(columnSpacing)
+	case back == "colonnade" && middle && columns && !propylon : 	 col.FirstOnBreakNoLast(columnSpacing)
 	case back == "wall" : extrude(-wallThickness)Wall
 	case back == "colonnade" && arches && !last  && !standalone :  s(scope.sx-col.archColumnBaseW/2,'1,'1) col.Arcade
 	case back == "colonnade" && arches && last || back == "colonnade" && arches && standalone: s(scope.sx-col.archColumnBaseW/2,'1,'1) t(col.archColumnBaseW/2,0,0) col.ArcadeStart
@@ -536,7 +480,6 @@ extrude(idx*step_depth)tex.Block("street", streetTexTile)
 ///////WALLS
 
 Walls -->
-color(wall)
 split(y){~1: s('1,'1, wallThickness)
 			t(0,0,-wallThickness)
 			set(trim.vertical, false)
@@ -545,7 +488,6 @@ split(y){~1: s('1,'1, wallThickness)
 		|entablatureH:Entablature}
 
 ShopWalls -->
-color(wall)
 s('1,'1,shopDepth)
 t(0,0,-shopDepth)
 set(trim.vertical,false)
@@ -583,10 +525,10 @@ else:
 
 Ceiling -->
 case roofType == "flat":
-	color(floor)tex.Block("floor",.5)#Flat Roof					
-	t(0,0,-column_diameter*col.friezeH) reverseNormals offset(-column_diameter/2,inside)color(roof) tex.Block("roof",4,24)
+	tex.Block("floor",.5)#Flat Roof					
+	t(0,0,-column_diameter*col.friezeH) reverseNormals offset(-column_diameter/2,inside) tex.Block("roof",4,24)
 else:
-	t(0,0,-column_diameter*col.friezeH) reverseNormals offset(-column_diameter/2,inside)color(roof) tex.Block("roof",4,24)
+	t(0,0,-column_diameter*col.friezeH) reverseNormals offset(-column_diameter/2,inside) tex.Block("roof",4,24)
 	
 Roof --> 
 case tuscan && propylon:

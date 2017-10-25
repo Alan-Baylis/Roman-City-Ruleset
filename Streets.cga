@@ -93,7 +93,7 @@ attr stairW				= 2
 attr streetHeight 		= 0.2
 
 const curbWidth 		= 0//stepDepth
-const sidewalkHeight 	= case building_type == "CLOACA": 1.5 else: streetHeight*1.2
+const sidewalkHeight 	= case building_type == "CLOACA": 1.5 else: streetHeight*1.5
 const curbHeight 		= sidewalkHeight*1.2
 
 const stepHeight 		= 0.28
@@ -176,11 +176,10 @@ else:
 	//t(0,streetHeight,0)
 	split(y){~stepHeight : Step(scope.sy+streetHeight)}*
 
-FlatStreet -->	
+FlatStreet -->
 	alignScopeToAxes()
-	t(0,streetHeight,0)
-	//color(ground)
-	tex.GroundBlock("street",streetTexTile,0.2)
+	extrude(streetHeight)
+	tex.Block("street",streetTexTile,streetTexTile)
 
 Step(yDim) -->
 	extrude (world.y, 100)
@@ -215,16 +214,22 @@ BaseVolume(yDim) -->
 						
 Paving -->
 case pavingType == "TRAV_PAVERS":
-	t(0,elevation,0)
-	[extrude(world.y,-extendBelow) WallPlane]
-	extrude(streetHeight)
-	//color(wall)
-	tex.GroundBlock("pavement",streetTexTile,0.2)
+	//t(0,elevation,0)
+	//[extrude(world.y,-extendBelow) WallPlane]
+	//extrude(streetHeight)
+	Paving2(scope.sy)
+	//tex.GroundBlock("pavement",streetTexTile,0.2)
 else:
 	t(0,elevation,0)
 	extrude(streetHeight)
 	//color(ground)
 	tex.GroundBlock("street",streetTexTile,0.2)
+	
+Paving2(yDim) -->
+	extrude(world.y,100)
+	split(y){yDim+extraHeight:comp(f){side:tex.Block("wall",10)
+			|top:tex.Block("pavement",streetTexTile,streetTexTile)}
+			}
 	
 StreetShape -->	
 	t(0,elevation,0)
@@ -270,7 +275,8 @@ Wall -->
 	extrude(world.y,height)
 	tex.Block("solid_wall", 8)
 
-
+WallPlane -->
+tex.Block("wall",10)
 
 	
 
