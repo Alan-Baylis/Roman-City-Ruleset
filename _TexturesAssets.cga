@@ -21,37 +21,9 @@ attr order_						= "DORIC"
 	const ionic						= order_ == "IONIC"
 	const corinthian				= order_ == "CORINTHIAN"
 
-///////COLORS
-@Group("Colors")@Color
-attr base					= "#CDC6AD" 
-@Group("Colors")@Color @Range( "#EEEEEE", "#F5F5F5","#FFFFFF","#E0E0D1","#AAAAA0")
-attr wall					=  20% : "#EEEEEE" 20% : "#F5F5F5" 20% : "#FFFFFF" 20% : "#E0E0D1" else : "#AAAAA0" 
-@Group("Colors")@Color
-attr wood					=  "#40331B" 
-@Group("Colors")@Color @Range( "#EEEEEE", "#F5F5F5","#FFFFFF","#E0E0D1","#AAAAA0")
-attr column					= 20% : "#EEEEEE" 20% : "#F5F5F5" 20% : "#FFFFFF" 20% : "#E0E0D1" else : "#AAAAA0" 
-@Group("Colors")@Color
-attr architrave				= "#E8DCC5"
-@Group("Colors")@Color
-attr frieze					= "#EBD8B5" 
-@Group("Colors")@Color
-attr metopes				= "#DB8C6C"
-@Group("Colors")@Color
-attr triglyph				= "#576484" 
-@Group("Colors")@Color
-attr cornice				= "#C9C0AD"
-@Group("Colors")@Color @Range("#A8763D", "#ff6600",  "#9E4F0E", "#B56A00", "#A3650D", "#AB6118")
-attr roof					= 15% : "#A8763D" 15% : "#9E4F0E" 15% : "#B56A00" 15% : "#A3650D" else : "#AB6118"
-
-const red = "#ff0000"
-const blue = "#0011ff"
-const cyan = "#34e1fa"
-const green = "#22E01B"
-const pink	= "#FF00DD"
-
 //////TEXTURES
 const test 					= "builtin:uvtest.png"
-const floorTex 				= fileRandom("floor/color/tile.*.jpg")
+const floorTex 				= fileRandom("floor/color/tile.*.jpg")			
 const roofTex 				= fileRandom("roof/textures/color/roof.*.jpg")
 const wallTex 				= fileRandom("wall/color/dirtmap.*.jpg")
 const solidWallTex			= "wall/color/dirtmap.01.jpg"
@@ -233,11 +205,9 @@ Texture(n) -->
 		set(material.name,"floor")
 		texture(floorTex)
 	case n == "block": 
-		color(wall)
 		set(material.name,"block")
 		texture(blockTex)
 	case n == "tallBlock":
-		color(wall)
 		set(material.name,"block")
 		texture(tallBlockTex)
 //	case n == "sand": 

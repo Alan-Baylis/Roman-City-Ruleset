@@ -145,11 +145,11 @@ TopAcroteria(w) -->
 case antefix == true :
 	i("builtin:cube")
 	s(simaLength/2,MidAcroH/2,MidAcroH)
-	t('-1,0,0)
+	//t('-1,0,0)
 	center(y)
 	setPivot(zxy,5)
 	i(tex.acroterionAsset)
-	[mirror(false,false,true)t(0,0,-w-geisonProjection) tex.WholeBlock("block")]
+	[mirror(false,false,true)t(0,0,-w+geisonProjection)/*t(0,0,-w-geisonProjection)*/ tex.WholeBlock("block")]
 	tex.WholeBlock("block")
 
 else: NIL
@@ -158,13 +158,13 @@ SideAcroteria(w) -->
 case antefix == true :
 	i("builtin:cube")
 	s(simaLength/2,SideAcroH/2,SideAcroH)
-	t('-1,0,0)
+	//t('-1,0,0)
 	setPivot(zxy,5)
 	i(tex.acroterionAsset)
 	rotate(rel,pivot,0,0,-roof_angle) 
 	t('1,'.25,0)
 	tex.WholeBlock("block")
-	t(0,0,-w-geisonProjection)
+	t(0,0,-w+geisonProjection)
 	mirror(false,false,true)
 	Anfefix.
 

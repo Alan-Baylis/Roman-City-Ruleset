@@ -10,12 +10,12 @@ version "2013.1"
 import col : "_Colonnade.cga"
 
 @Hidden 
-import dom : "Domus.cga" (houseType = "ROMAN SHOPS", redWall_on = false)
+import dom : "Domus.cga" (houseType = "ROMAN SHOPS", redWall_on = false, baseHeight = 0)
 
 @Hidden 		
 import rf:   "_Roof.cga"
 
-@Hidden 	
+@Hidden	
 import tex : "_TexturesAssets.cga"	
 
 
@@ -28,7 +28,7 @@ attr LOD					= "LOW"
 	const medLOD				= LOD == "MED"
 	const lowLOD				= LOD == "LOW"
 
-@Group ("Materials",1) @Range("Green", "Gravel")
+@Group ("Materials",1) @Range("Green", "Gravel", "No Ground")
 attr groundType				= "Gravel"
 
 #-------General
@@ -197,6 +197,9 @@ attr roofType				= "gable"
 @Group("Roof",9)
 attr roof_angle 			= case roofType == "gable": 13.8 else: 10
 
+@Group("Roof",9)@Range(1,2)
+attr roof_direction			= 1
+
 const roofBrickW 			= columnSpacing *0.25
 const roofBrickH 			= columnSpacing *0.35
 const railingH				= 1
@@ -224,7 +227,6 @@ case noPorticus == true:
 											|left:Wall
 											|right:Wall
 											|back:Wall}
-											//|top:Roof}
 									|~1: NIL}
 			|entablatureH: comp(f){side:Entablature
 									|top:Ceiling [tex.Block("floor",.5)]Roof1}
@@ -253,8 +255,12 @@ else: NIL
 
 GroundTexture -->
 case groundType == "Gravel":
-	tex.Block("ground",5)
-else: tex.Block("green")
+	comp(f){side:tex.Block("wall",tile)
+	|top:tex.Block("ground",5)}
+case groundType == "Green": 
+	tex.Block("grass",1)
+else: NIL
+
 
 OffsetStoa  --> comp(f) { inside: NIL | border: OffsetStoa2 }
 
@@ -307,7 +313,6 @@ else: 						NIL
 LinearSide(n,y) -->
 case n == 0: reverseNormals tex.Block("floor",.5) #Floor
 			reverseNormals t(0,0,-columnHeight)offset(-column_diameter,inside)tex.Block("roof",4,24) #Ceiling
-		//	reverseNormals t(0,0,-entablatureH)color(floor) tex.Block("floor",.5) #Flat Roof
 case n == 1: Roof #Roof
 case !shops && n>2 && n < sides: Walls #Back Walls
 case shops  && n>2 && n < sides: split(y){~1:ShopWalls|entablatureH: Entablature}#Back Walls - Shops
@@ -358,7 +363,7 @@ split(y){columnHeight:split(z){shopDepth:comp(f){front:s('1,scope.sy+entablature
 								|~1:comp(f)	{front: FrontSide
 											|left: 	LeftSide
 											|right: RightSide
-											|back: 	BackSide
+											|back: 	BackSide #Need to fix!
 											|bottom:reverseNormals tex.WholeBlock("floor",.5)}	 			
 								}
 		|~1:  comp(f){front:FrontEntablature(scope.sx)
@@ -422,7 +427,7 @@ BackSide -->
 	case back == "colonnade" && standalone && right != "open"	&& left == "open" && columns && !propylon: 	 col.NoFirstLastFlush(columnSpacing)	 
 	case back == "colonnade" && standalone && right == "open" 	&& left == "open" && columns && !propylon: 	 col.FirstLastFlush(columnSpacing)
 	case back == "colonnade" && middle && columns && !propylon : 	 col.FirstOnBreakNoLast(columnSpacing)
-	case back == "wall" : extrude(-wallThickness)Wall
+	case back == "wall" &&  !shops : extrude(-wallThickness)Wall
 	case back == "colonnade" && arches && !last  && !standalone :  s(scope.sx-col.archColumnBaseW/2,'1,'1) col.Arcade
 	case back == "colonnade" && arches && last || back == "colonnade" && arches && standalone: s(scope.sx-col.archColumnBaseW/2,'1,'1) t(col.archColumnBaseW/2,0,0) col.ArcadeStart
 	case back == "colonnade" && propylon && columns: PropylonColonnade(scope.sx)
@@ -473,7 +478,7 @@ split(y)	{step_height: Step(n)
 	 	| ~1: Steps(n-1)}
 
 Step(idx) -->
-extrude(idx*step_depth)tex.Block("street", streetTexTile)
+extrude(idx*step_depth)tex.Block("wall", tile)
 
 
 ////////////
@@ -520,6 +525,7 @@ case propylon && columns && hexastyle:
 case !propylon && columns: col.Entablature(columnSpacing,column_diameter)
 else:
 	col.Entablature(columnSpacing,archColumnDiameter)
+	
 ////////////
 ////////ROOF
 
@@ -539,7 +545,7 @@ else: Roof1
 
 Roof1 -->
 	case roofType == "gable" && !propylon:
-		roofGable(roof_angle)
+		roofGable(roof_angle,0,0,true,roof_direction)
 		comp(f){ top : rf.Roof(roofBrickW,roofBrickH)|vertical: tex.Block("wall", tile)}
 		comp(e){ ridge: rf.Ridge(0,roofBrickW,roofBrickH) | hip: rf.Ridge(roofBrickW*0.4,roofBrickW,roofBrickH) | valley: rf.Ridge(roofBrickW*0.4,roofBrickW,roofBrickH)}
 	case roofType == "gable" && propylon:
@@ -562,16 +568,3 @@ Overhang -->
 		
 	else: NIL		
 
-
-style Comitium_2
-attr YEAR = -160.0
-attr stepType = "continuous"
-attr columnSpacing = 3.0
-attr column_diameter = 0.7
-
-
-style Comitium_1
-attr YEAR = 0.0
-attr stepType = "continuous"
-attr columnSpacing = 3.0
-attr column_diameter = 0.7

@@ -78,7 +78,7 @@ const roofMinArea = 15
 const stepHeight = 0.23
 const stepDepth = .32
 
-const baseHeight = domusSteps*stepHeight
+attr baseHeight = domusSteps*stepHeight
 
 const floorThickness = .3
 const columnSpacing = 1.5
@@ -232,7 +232,7 @@ LowerFacade(p,q) -->
 	
 LowerFacadeOpenings(p,q) -->
 	case shops:
-	split(x) {~2:PaintedWall 
+	split(x) {~2:PaintedWall
 			 |shopDoorWidth*rand(1,1.8): split(y){baseHeight:/* t(0,0,-domusSteps*stepDepth)*/Steps(domusSteps,p,q)
 											|doorMinHeight*rand(.9,1.1): Door(p,q)
 											|~1: Wall}

@@ -19,50 +19,13 @@ attr LOD					= "LOW"
 	const medLOD				= LOD == "MED"
 	const lowLOD				= LOD == "LOW"		
 
-
-
-/*
-@Group("SceneSettings",0) @Range(-800,300)
-attr YEAR		= 0
-
-@Group("SceneSettings",0) @Range("OFF","ON")
-attr Materials_View		= "OFF"
-	const materials			= Materials_View == "ON"
-	const noMaterials		= Materials_View == "OFF"
-
-
-
-	
-#--------Materials
-	
-@Group ("Materials",1) @Range("Under Construction","Brick","Travertine", "Marble", "None", "Varied")
-attr Material				= 	case noMaterials && YEAR >= start_date && YEAR <= end_date: "Varied"
-								case materials && YEAR >= construction_start && YEAR <=construction_end: "Under Construction"
-								case materials && YEAR >= brick_start && YEAR <=brick_end: "Brick"
-								case materials && YEAR >= travertine_start && YEAR <=travertine_end: "Travertine"
-								case materials && YEAR >= marble_start && YEAR <=marble_end: "Marble"
-								else: "None"
-								
-	const constr				= Material == "Under Construction" 
-	const brick					= Material == "Brick"
-	const trav					= Material == "Travertine"
-	const marble				= Material == "Marble"
-	const noModel				= Material == "None"
-		
-
-const MaterialColor			= 	case constr: construction_color
-								case brick: brick_color
-								case trav: travertine_color
-								case marble: marble_color							
-								else: wall	
-*/
 							
 #-------General
 
 @Group("General",1)
 attr elevation 	= 0
 
-@Group("General",1) @Range("STREET","STAIRS","WALL","PAVED AREA","CLOACA")
+@Group("General",1) @Range("STREET","STAIRS","WALL","PAVED AREA","CLOACA","PAVED BLOCK")
 attr building_type			= 	"STREET"
 
 @Group("General",1) @Range("STREET","TRAV_PAVERS")
@@ -105,54 +68,6 @@ const streetTexTile 	= 5
 @Group("Wall",4)
 attr height				= 3
 
-/*
-#-------Time Periods
-
-@Group ("Time Period",10) @Order(0) @Range(-800,300)
-attr start_date	= 0
-@Group ("Time Period",10) @Order(0) @Range(-800,300)
-attr end_date	= 0
-@Group ("Time Period",10) @Order(1) @Range(-800,300)
-attr construction_start	= 0
-@Group ("Time Period",10) @Order(2) @Range(-800,300)
-attr construction_end	= 0
-@Group ("Time Period",10) @Order(3) @Range(-800,300)
-attr brick_start		= 0
-@Group ("Time Period",10) @Order(4) @Range(-800,300)
-attr brick_end			= 0
-@Group ("Time Period",10) @Order(5) @Range(-800,300)
-attr travertine_start	= 0
-@Group ("Time Period",10) @Order(6) @Range(-800,300)
-attr travertine_end		= 0
-@Group ("Time Period",10) @Order(7) @Range(-800,300)
-attr marble_start       = 0
-@Group ("Time Period",10) @Order(8) @Range(-800,300)
-attr marble_end			= 0
-
-#-------Colors
-
-@Group("Colors",11)
-attr base					= case noMaterials || materials && noModel: "#CDC6AD" else: MaterialColor
-@Group("Colors",11)@Range( "#EEEEEE", "#F5F5F5","#FFFFFF","#E0E0D1","#AAAAA0")
-attr wall					= case noMaterials  || materials && noModel: 20% : "#EEEEEE" 20% : "#F5F5F5" 20% : "#FFFFFF" 20% : "#E0E0D1" else : "#AAAAA0" else: MaterialColor
-@Group ("Colors",11)
-attr floor					= case noMaterials  || materials && noModel: "#A68F74" else: MaterialColor
-@Group ("Colors",11)
-attr ground					= case noMaterials  || materials && noModel: "#ADB38F" else: MaterialColor
-
-const construction_color	= "#F7EB9E" 
-const brick_color			= "#705C46" 
-const travertine_color		= "#E2E8D1" 
-const marble_color			= "#F79E9E"
-
-const blue					= "#0066FF"
-const red					= "#FF3300"
-const green					= "#33CC33"
-const pink					= "#FF6699"
-const cyan					= "#00FFFF"
-const purple				= "#6600CC"
-const orange				= "#FF9900"
-*/
 
 ///////STREET
 
@@ -164,6 +79,7 @@ Lot --> //t(0,elevation,0)Lot.
 		case building_type == "PAVED AREA": Paving
 		case building_type == "WALL": Wall
 		case building_type == "STREET": StreetShape
+		case building_type == "PAVED BLOCK": Paving2(scope.sy)
 		else: NIL
 //*/
 
@@ -183,7 +99,6 @@ FlatStreet -->
 
 Step(yDim) -->
 	extrude (world.y, 100)
-	//color(ground)
 	split(y) {yDim : tex.Block("street", streetTexTile)| ~1 : NIL}
 	
 //////SIDEWALK
@@ -213,29 +128,27 @@ BaseVolume(yDim) -->
 ///////PAVING & CURB
 						
 Paving -->
-case pavingType == "TRAV_PAVERS":
-	//t(0,elevation,0)
-	//[extrude(world.y,-extendBelow) WallPlane]
-	//extrude(streetHeight)
-	Paving2(scope.sy)
-	//tex.GroundBlock("pavement",streetTexTile,0.2)
-else:
 	t(0,elevation,0)
 	extrude(streetHeight)
-	//color(ground)
+	PavingType
+	
+PavingType -->
+case pavingType == "STREET":
 	tex.GroundBlock("street",streetTexTile,0.2)
+else:
+	tex.GroundBlock("pavement",streetTexTile,streetTexTile)
+
 	
 Paving2(yDim) -->
 	extrude(world.y,100)
 	split(y){yDim+extraHeight:comp(f){side:tex.Block("wall",10)
-			|top:tex.Block("pavement",streetTexTile,streetTexTile)}
+			|top:PavingType /*tex.Block("pavement",streetTexTile,streetTexTile)*/}
 			}
 	
 StreetShape -->	
 	t(0,elevation,0)
 	[extrude(world.y,-extendBelow) WallPlane]
 	extrude(streetHeight)
-	//color(ground)
 	tex.GroundBlock("street",streetTexTile,0.2)
 	
 						
@@ -243,7 +156,6 @@ Curb -->
 	tex.Block("curb",streetTexTile,streetTexTile,0.2)
 	
 Sidewalk2  -->
-	//color(ground)
 	tex.Block("curb",streetTexTile,streetTexTile,0.2)
 
 
@@ -265,7 +177,6 @@ Steps(n) -->
 
 CurbStep(idx) -->
 	extrude(idx*stepDepth)
-	//color(ground)
 	tex.Block("street", streetTexTile)
 
 ///////WALL
