@@ -191,31 +191,7 @@ const tile 						= columnHeight
 @Description("Market Basilica is a massing model of a Hellenistic type, specifically found at Magnesia on the Maeander")
 attr height 				= 10
 
-#-------Colors
-@Group("Colors",9)@Color
-attr base					= "#CDC6AD"
-@Group("Colors",9)@Color @Range( "#EEEEEE", "#F5F5F5","#FFFFFF","#E0E0D1","#AAAAA0")
-attr wall					= 20% : "#EEEEEE" 20% : "#F5F5F5" 20% : "#FFFFFF" 20% : "#E0E0D1" else : "#AAAAA0"
-@Group("Colors",9)@Color
-attr wood					= "#40331B"
-@Group("Colors",9)@Color @Range( "#EEEEEE", "#F5F5F5","#FFFFFF","#E0E0D1","#AAAAA0")
-attr column					= 20% : "#EEEEEE" 20% : "#F5F5F5" 20% : "#FFFFFF" 20% : "#E0E0D1" else : "#AAAAA0"
-@Group("Colors",9)@Color
-attr architrave				= "#E8DCC5"
-@Group("Colors",9)@Color
-attr frieze					= "#EBD8B5"
-@Group("Colors",9)@Color
-attr metopes				= "#EBD8B5"
-@Group("Colors",9)@Color
-attr triglyph				= "#B5B59F"
-@Group("Colors",9)@Color
-attr cornice				= "#C9C0AD"
-@Group("Colors",9)@Color @Range("#A8763D", "#ff6600",  "#9E4F0E", "#B56A00", "#A3650D", "#AB6118")
-attr roof					= 15% : "#A8763D" 15% : "#9E4F0E" 15% : "#B56A00" 15% : "#A3650D" else : "#AB6118" 
-@Group ("Colors",9)@Color
-attr floor					= "#A68F74"
-@Group ("Colors",9)@Color
-attr ground					= "#ADB38F" 
+
 
 ////////////
 ///////START
@@ -235,16 +211,13 @@ else:
 
 Mass -->
 case republican:
-	color(wall)
 	split(y){groundFloorHeight : GroundFloor| ~1 : NIL}
 else:
-	color(wall)
 	split(y){groundFloorHeight : GroundFloor| ~1 : s(scope.sx-aisle_width*2-wallThickness*2,'1,'1) center(x)t(0,-railingH,0)bu.UpperVolume}
 
 ///////BASE
 	
 Base -->
-	color(base)
 	t(0,-extra_steps_down*step_height,0)
 	extrude(baseHeight)
 	set(trim.horizontal, true)
@@ -281,7 +254,7 @@ case republican:
 													}
 									|back: BackEntrance
 									|side: s(scope.sx-column_diameter*2,'1,'1)center(x)Wall
-									|bottom: s('1,scope.sy+porch_depth,'1)t(0,-porch_depth,0)reverseNormals color(floor)tex.Block("floor",.5)
+									|bottom: s('1,scope.sy+porch_depth,'1)t(0,-porch_depth,0)reverseNormals tex.Block("floor",.5)
 									}
 			|entablatureH: comp(f){side:col.Entablature(column_spacing,column_diameter)
 									|top:offset(-aisle_width-wallThickness)
@@ -291,7 +264,7 @@ case republican:
 			|~1: comp(f){side:Railing}}
 else:
 	split(y){columnHeight:comp(f)	{side:  s(scope.sx-col.archColumnBaseW,'1,'1)center(x)col.ArcadeStart
-									|bottom: reverseNormals color(floor)tex.Block("floor",.5)
+									|bottom: reverseNormals tex.Block("floor",.5)
 									}
 			|entablatureH: comp(f){side:col.Entablature(column_spacing,column_diameter)
 								  |top:offset(-aisle_width*2-wallThickness)
@@ -324,10 +297,10 @@ else: Wall
 
 Ceiling -->
 case roof_type == "Flat":
-color(floor) tex.Block("floor",.5)
+tex.Block("floor",.5)
 reverseNormals
 t(0,0,-.1)
-color(roof) tex.Block("roof",4,24)	
+tex.Block("roof",4,24)	
 else:
 OuterRoof
 
@@ -357,7 +330,6 @@ else: InnerVolume
 InnerVolume -->
 case republican && show_interior == true:
 	extrude(groundFloorHeight+upperFloorHeight)
-	color(wall)
 	split(y){columnHeight: comp(f){	back:col.FirstFlushNoLast(column_spacing)
 									|left:col.FirstFlushNoLast(column_spacing)
 									|right:col.FirstFlushNoLast(column_spacing)}
@@ -367,12 +339,10 @@ case republican && show_interior == true:
 			|~1:bu.UpperVolume}
 case republican && show_interior == false:
 	extrude(groundFloorHeight+upperFloorHeight)
-	color(wall)
 	split(y){columnHeight+entablatureH: NIL
 			|~1:bu.UpperVolume}
 else:	
 	extrude(groundFloorHeight+upperFloorHeight)
-	color(wall)
 	split(y){columnHeight: comp(f){	side: split(x){~1:Wall|arch_width:Entrance(scope.sx)|~1:Wall}}
 			|entablatureH: comp(f){side:col.Entablature(column_spacing, column_diameter)}
 			|~1:NIL}
@@ -399,7 +369,6 @@ Entrance(x) -->
 			}
 
 DoorMain(x) -->  
-	color(wood)
 	t(0,0,-wallThickness*0.15) 
 	split(y){ ~1          : split(x){ doorFrameW : DoorFrame(wallThickness*0.8) | ~1 : Door | doorFrameW : DoorFrame(wallThickness*0.8) } 
 			| doorFrameH  : Wall(wallThickness*0.8) DoorCornice }
@@ -438,7 +407,7 @@ split(x){~arch_width:WindowWall
 WindowWall -->
 	split(x){~1: Wall
 			|col.orderW: split(y){~1: Wall
-									  |~1: t(0,0,(-wallThickness+column_diameter)/2)color(wood)Window.
+									  |~1: t(0,0,(-wallThickness+column_diameter)/2)Window.
 									  |~1: Wall}
 			|~1: Wall}
 
@@ -450,10 +419,10 @@ Roof -->
 
 OuterRoof -->
 	roofShed (roof_angle)
-	comp(f){top:  color(roof) rf.Roof(roofBrickW,roofBrickH)|bottom: tex.Block("wall")}
+	comp(f){top:  rf.Roof(roofBrickW,roofBrickH)|bottom: tex.Block("wall")}
 	
 Roof1 -->
-	comp(f){bottom: NIL|vertical: Wall|top:  color(roof) rf.Roof(roofBrickW,roofBrickH)}
+	comp(f){bottom: NIL|vertical: Wall|top:  rf.Roof(roofBrickW,roofBrickH)}
 	
 ///////MARKET BASILICA TYPE
 
@@ -483,7 +452,7 @@ else :
 	comp(f){top:roofShed(roof_angle*.8,3)MarketBasilicaRoof|side: Wall}
 
 MarketBasilicaRoof -->
-	comp(f) {top: color (roof) rf.Roof(1,1) | side: Wall}
+	comp(f) {top: rf.Roof(1,1) | side: Wall}
 
 Bema(zDim) -->
 	extrude(height*.6)

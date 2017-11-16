@@ -4,7 +4,7 @@
  * Author:  msaldana
  */
 
-version "2014.1"
+version "2017.0"
 
 @Hidden 
 import col : "_Colonnade.cga" 
@@ -140,8 +140,7 @@ case height > 4.5 && peristyle == false:
 											}		
 
 								}
-					//|~1: NIL
-				//	}
+
 
 case height >4.5 && peristyle == true:
 split(x){~1: split(y){'.5: comp(f){front:WindowWall(n)
@@ -179,8 +178,6 @@ split(x){~1: split(y){'.5: comp(f){front:WindowWall(n)
 											}		
 
 								}
-				//	|~1: NIL
-				//	}
 
 case height <= 4.5 && peristyle == false:				
 					split(x){'.75: split(y){'.5: comp(f){front: Prostas(n,r) t(0,0,-2)EntranceWall	
@@ -190,9 +187,6 @@ case height <= 4.5 && peristyle == false:
 																|side:WallSide
 																|bottom: WallSide
 																}
-											//		|'.4: comp(f){front:Prostas(n,r)Railing t(0,0,-2)EntranceWall
-												//				|side: set(trim.vertical,false)Wall
-												//	 			}
 													|'.05: comp(f){side:WallSide
 																	|top: Roof
 																	|bottom: WallSide
@@ -209,8 +203,7 @@ case height <= 4.5 && peristyle == false:
 											}		
 
 								}
-				//	|~1: NIL
-				//	}
+
 					
 else:
 split(x){~1: split(y){'.5: comp(f){front:WindowWall(n)
@@ -229,9 +222,6 @@ split(x){~1: split(y){'.5: comp(f){front:WindowWall(n)
 																|side:WallSide
 																|bottom: WallSide
 																}
-													//|'.4: comp(f){front:Prostas(n,r)Railing t(0,0,-2)EntranceWall
-													//			|side: set(trim.vertical,false)Wall
-													// 			}
 													|'.05: comp(f){side:WallSide
 																	|top: Roof
 																	|bottom: WallSide
@@ -248,15 +238,12 @@ split(x){~1: split(y){'.5: comp(f){front:WindowWall(n)
 											}		
 
 								}
-				//	|~1: NIL
-				//	}
 
 
 SidePeristyleRight(n,r) -->
 setPivot(xyz,4)
 extrude(world.y,100)
-split(y){height*n://split(x){'.75: 
-									split(y){'.5: comp(f){front: Prostas(n,r) t(0,0,-2)EntranceWall	
+split(y){height*n:	split(y){'.5: comp(f){front: Prostas(n,r) t(0,0,-2)EntranceWall	
 																|side: set(trim.vertical,false)Wall
 																}
 													|'.05: comp(f){top:tex.WholeBlock("floor",.5)
@@ -269,14 +256,13 @@ split(y){height*n://split(x){'.75:
 																	}
 													}
 			
-					|~1: NIL
-					}
+		|~1: NIL
+		}
 
 SidePeristyleLeft(n,r) -->
 setPivot(xyz,1)
 extrude(world.y,100)
-split(y){height*n://split(x){'.75: 
-									split(y){'.5: comp(f){front: Prostas(n,r) t(0,0,-2)EntranceWall	
+split(y){height*n:	split(y){'.5: comp(f){front: Prostas(n,r) t(0,0,-2)EntranceWall	
 																|side: set(trim.vertical,false)Wall
 																}
 													|'.05: comp(f){top:tex.WholeBlock("floor",.5)
@@ -293,12 +279,10 @@ split(y){height*n://split(x){'.75:
 					}
 					
 Prostas(n,r) -->
-col.NoFirstNoLast(col.column_spacing*3)//(scope.sx/r)
+col.NoFirstNoLast(col.column_spacing*3)
 
 Wall -->
-s('1,'1,wallThickness)
-t(0,0,-wallThickness)
-i("builtin:cube")
+extrude(-wallThickness)
 tex.Block("wall",col.columnHeight)
 
 WallSide -->
